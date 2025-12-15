@@ -6,9 +6,9 @@ async function getMainCapsule(appID: string) {
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
-
     const result = await fetch(url);
-    return result.blob;
+    const blob = await result.blob();
+    return blob;
   } catch (error: any) {
     console.error(error.message);
   }

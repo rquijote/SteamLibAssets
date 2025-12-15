@@ -1,7 +1,14 @@
 import { getMainCapsule } from "./fetch-assets.js";
 
 console.log("js file loaded");
+/* 
+    Shift f1 -> Run Build Task to run TS watch
+*/
 
+
+/*  Adds event listener to appIdButton.
+    TODO: Simplify this function to just return error if null.  
+*/
 const appIdButton = document.getElementById("enterAppIdBtn");
 if (appIdButton != null) {
     console.log("added event");
@@ -10,16 +17,21 @@ if (appIdButton != null) {
     console.error("ERROR: Couldn't find App ID button.");
 }
 
-function enterAppIDButtonClick() {
+/* Adds the click to appIdButton 
+   TODO: Simplify this function to just return error if null.  
+*/
+async function enterAppIDButtonClick() {
     const appIdInputValue = (<HTMLInputElement>document.getElementById("appIdInput")).value;
     if (appIdInputValue != null) {
         console.log(appIdInputValue);
-        const mainCapsule = getMainCapsule(appIdInputValue);
-        printMainCapsule(mainCapsule);
+        const blob = await getMainCapsule(appIdInputValue);
+        printMainCapsule(blob);
     }
 }
 
-function printMainCapsule(mainCapsule: Promise<(() => Promise<Blob>) | undefined>) {
-    if (mainCapsule == undefined) return console.error("Error: mainCapsule is undefined. ");
-    console.log(mainCapsule);
+function printMainCapsule(blob: Blob | undefined) {
+    if (blob == undefined) return console.error("Error: mainCapsule is undefined. ");
+    let img = document.createElement("img"); 
+    img.src = URL.createObjectURL(blob);
+    document.body.appendChild(img);
 }

@@ -7,7 +7,8 @@ async function getMainCapsule(appID) {
             throw new Error(`Response status: ${response.status}`);
         }
         const result = await fetch(url);
-        return result.blob;
+        const blob = await result.blob();
+        return blob;
     }
     catch (error) {
         console.error(error.message);
