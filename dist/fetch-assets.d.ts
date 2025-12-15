@@ -1,3 +1,2 @@
-declare function getMainCapsule(appID: string): Promise<Blob | undefined>;
-export { getMainCapsule };
+export {};
 //# sourceMappingURL=fetch-assets.d.ts.map
