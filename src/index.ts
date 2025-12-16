@@ -1,4 +1,4 @@
-import JSZip from "jszip";
+declare const JSZip: any;
 
 //Shift f1 -> Run Build Task to run TS watch
 console.log("js file loaded");
@@ -11,6 +11,7 @@ console.log("js file loaded");
 
 const appIdButton = document.getElementById("enterAppIdBtn");
 const downloadBtn = document.getElementById("downloadBtn");
+
 if (appIdButton == null) {
   console.error("Couldn't find App ID button.");
 } else {
@@ -51,9 +52,29 @@ async function downloadButtonClick() {
 
   const blobs = await Promise.all(promises);
   const zip = new JSZip();
-  blobs.forEach((blob) => {
-    zip.file("image.jpg", blob);
+  blobs.forEach((blob, index) => {
+    zip.file(`image${index}.jpg`, blob);
   });
+
+  const readme = zip.folder("readme");
+  readme.file("readme.txt", "Created with JSZip");
+
+  const zipFile = await zip.generateAsync({type: "blob"});
+  console.log(zipFile);
+
+  downloadZip(zipFile);
+}
+
+function downloadZip(file: any) {
+  const a = document.createElement("a");
+  a.download = "test.zip";
+  const url = URL.createObjectURL(file);
+  a.href = url;
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
 
 /**
@@ -69,7 +90,7 @@ async function getAllAssets(appID: string) {
     `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/header.jpg`, // header
     `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/library_600x900.jpg`, // library capsule
     `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/library_600x900_2x.jpg`, // library capsule 2x
-    `hfttps://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/library_hero.jpg`, // library hero
+    `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/library_hero.jpg`, // library hero
   ];
   let blobs: (Blob | undefined)[] = [];
   for (const url of urls) {

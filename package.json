@@ -2,14 +2,5 @@
   "devDependencies": {
     "typescript": "^5.9.3"
   },
-  "type": "module",
-  "dependencies": {
-    "jszip": "^3.10.1",
-    "vite": "^7.2.7"
-  },
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  }
+  "type": "module"
 }
