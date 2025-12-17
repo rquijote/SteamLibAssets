@@ -50,14 +50,21 @@ async function downloadButtonClick() {
     return blob;
   });
 
+    const imgNames : string[] = [
+    "main_capsule_img",
+    "small_capsule_img",
+    "header_img",
+    "library_capsule_img",
+    "2xlibrary_capsule_img",
+    "library_hero_img",
+  ];
+
+
   const blobs = await Promise.all(promises);
   const zip = new JSZip();
   blobs.forEach((blob, index) => {
-    zip.file(`image${index}.jpg`, blob);
+    zip.file(`${index}_${imgNames[index]}.jpg`, blob);
   });
-
-  const readme = zip.folder("readme");
-  readme.file("readme.txt", "Created with JSZip");
 
   const zipFile = await zip.generateAsync({type: "blob"});
   console.log(zipFile);
@@ -85,11 +92,11 @@ function downloadZip(file: any) {
 
 async function getAllAssets(appID: string) {
   const urls = [
+    `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/library_600x900.jpg`, // library capsule (cover)
+    `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/header.jpg`, // header (background)
+    `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/logo.png`, // transparent logo (logo)
     `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/capsule_616x353.jpg`, // main capsule
     `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/capsule_231x87.jpg`, // small capsule
-    `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/header.jpg`, // header
-    `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/library_600x900.jpg`, // library capsule
-    `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/library_600x900_2x.jpg`, // library capsule 2x
     `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/library_hero.jpg`, // library hero
   ];
   let blobs: (Blob | undefined)[] = [];
@@ -126,15 +133,6 @@ async function getBlob(url: string) {
  */
 
 function printAllAssets(blobs: (Blob | undefined)[]) {
-  const imgIds : string[] = [
-    "main_capsule_img",
-    "small_capsule_img",
-    "header_img",
-    "library_capsule_img",
-    "2xlibrary_capsule_img",
-    "library_hero_img",
-  ];
-
   for (let i = 0; i < blobs.length; i++) {
     let div = document.createElement("div");
     let img = document.createElement("img");
@@ -149,7 +147,6 @@ function printAllAssets(blobs: (Blob | undefined)[]) {
       img.src = URL.createObjectURL(blob);
       input.checked = true;
     }
-    img.id = imgIds[i]!;
     div.appendChild(img);
     div.appendChild(input);
     document.body.appendChild(div);
