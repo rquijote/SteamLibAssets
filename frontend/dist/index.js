@@ -1,3 +1,4 @@
+import * as Fetch from "./fetchAssets.js";
 //Shift f1 -> Run Build Task to run TS watch
 console.log("js file loaded");
 /**
@@ -23,8 +24,8 @@ async function enterAppIDButtonClick() {
     const appIdInputValue = (document.getElementById("appIdInput")).value;
     if (appIdInputValue == null)
         return;
-    const blobs = await getAllAssets(appIdInputValue);
-    printAllAssets(blobs);
+    const res = await Fetch.fetchGrids(5262075);
+    console.log(res);
 }
 async function downloadButtonClick() {
     const imgs = document.querySelectorAll("img"); // Selects all imgs
@@ -135,5 +136,4 @@ function printAllAssets(blobs) {
         document.body.appendChild(div);
     }
 }
-export {};
 //# sourceMappingURL=index.js.map

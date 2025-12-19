@@ -1,4 +1,5 @@
 declare const JSZip: any;
+import * as Fetch from "./fetchAssets.js";
 
 //Shift f1 -> Run Build Task to run TS watch
 console.log("js file loaded");
@@ -29,8 +30,8 @@ async function enterAppIDButtonClick() {
     document.getElementById("appIdInput")
   )).value;
   if (appIdInputValue == null) return;
-  const blobs = await getAllAssets(appIdInputValue);
-  printAllAssets(blobs);
+  const res = await Fetch.fetchGrids(5262075)
+  console.log(res);
 }
 
 async function downloadButtonClick() {
