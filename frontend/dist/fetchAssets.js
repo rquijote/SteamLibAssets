@@ -28,7 +28,13 @@ export async function fetchIcons(appId) {
     return mapAssets(rawData);
 }
 function mapAssets(rawData) {
-    return rawData.map(item => ({
+    //Filters out anything that isn't a jpg, png or jpeg.
+    return rawData
+        .filter((item) => {
+        const url = item.fullImageUrl.toLowerCase();
+        return (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".jpeg"));
+    })
+        .map((item) => ({
         fullImageUrl: item.fullImageUrl,
         thumbnailImageUrl: item.thumbnailImageUrl,
         width: item.width,
@@ -36,8 +42,8 @@ function mapAssets(rawData) {
         author: {
             name: item.author.name,
             avatarUrl: item.author.avatarUrl,
-            steamProfileUrl: item.author.steamProfileUrl
-        }
+            steamProfileUrl: item.author.steamProfileUrl,
+        },
     }));
 }
 //# sourceMappingURL=fetchAssets.js.map

@@ -4,9 +4,10 @@ import type { Asset } from "./types/Asset.js";
 // since there's no identifiable differences between asset types yet. 
 
 export function renderImages(grids: Asset[]) {
+    const assetsGrid = document.getElementById("assets-grid");
     grids.forEach(grid => {
         const img = document.createElement("img");
         img.src = grid.thumbnailImageUrl;
-        document.body.appendChild(img);
+        assetsGrid!.appendChild(img);
     });
 }

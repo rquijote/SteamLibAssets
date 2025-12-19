@@ -1,0 +1,10 @@
+#assets-container {
+    background-color: green;
+}
+
+#assets-grid {
+    background-color: lightgray; /* Temp */
+    display: grid;
+    width: 95vw;
+    height: 5000px;
+}

@@ -31,15 +31,23 @@ export async function fetchIcons(appId: number): Promise<Asset[]> {
 }
 
 function mapAssets(rawData: any[]): Asset[] {
-    return rawData.map(item => ({
-    fullImageUrl: item.fullImageUrl,
-    thumbnailImageUrl: item.thumbnailImageUrl,
-    width: item.width,
-    height: item.height,
-    author: {
-      name: item.author.name,
-      avatarUrl: item.author.avatarUrl,
-      steamProfileUrl: item.author.steamProfileUrl
-    }
-  }));
+  //Filters out anything that isn't a jpg, png or jpeg.
+  return rawData
+    .filter((item) => {
+      const url = item.fullImageUrl.toLowerCase();
+      return (
+        url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".jpeg")
+      );
+    })
+    .map((item) => ({
+      fullImageUrl: item.fullImageUrl,
+      thumbnailImageUrl: item.thumbnailImageUrl,
+      width: item.width,
+      height: item.height,
+      author: {
+        name: item.author.name,
+        avatarUrl: item.author.avatarUrl,
+        steamProfileUrl: item.author.steamProfileUrl,
+      },
+    }));
 }

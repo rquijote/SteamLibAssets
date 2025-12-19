@@ -9,25 +9,41 @@ console.log("js file loaded");
  */
 const appIdButton = document.getElementById("enterAppIdBtn");
 const downloadBtn = document.getElementById("downloadBtn");
-if (appIdButton == null) {
-    console.error("Couldn't find App ID button.");
-}
-else {
-    appIdButton.addEventListener("click", enterAppIDButtonClick);
-}
-if (downloadBtn == null) {
-    console.error("Couldn't find App ID button.");
-}
-else {
-    downloadBtn.addEventListener("click", downloadButtonClick);
+const gridsBtn = document.getElementById("grids-btn");
+const heroesBtn = document.getElementById("heroes-btn");
+const logosBtn = document.getElementById("logos-btn");
+const iconsBtn = document.getElementById("icons-btn");
+const appId = 5262075; // Temp default id
+assetBtnsClick("grids");
+appIdButton.addEventListener("click", enterAppIDButtonClick);
+downloadBtn.addEventListener("click", downloadButtonClick);
+gridsBtn.addEventListener("click", () => assetBtnsClick("grids"));
+heroesBtn.addEventListener("click", () => assetBtnsClick("heroes"));
+logosBtn.addEventListener("click", () => assetBtnsClick("logos"));
+iconsBtn.addEventListener("click", () => assetBtnsClick("icons"));
+async function assetBtnsClick(type) {
+    let assets;
+    switch (type) {
+        case "grids":
+            assets = await Fetch.fetchGrids(appId);
+            break;
+        case "heroes":
+            assets = await Fetch.fetchHeroes(appId);
+            break;
+        case "logos":
+            assets = await Fetch.fetchLogos(appId);
+            break;
+        case "icons":
+            assets = await Fetch.fetchIcons(appId);
+            break;
+    }
+    // Should have a loading icon ihere during this.
+    Render.renderImages(assets);
 }
 async function enterAppIDButtonClick() {
     const appIdInputValue = (document.getElementById("appIdInput")).value;
     if (appIdInputValue == null)
         return;
-    const res = await Fetch.fetchGrids(5262075);
-    console.log(res);
-    Render.renderImages(res);
 }
 async function downloadButtonClick() {
     const imgs = document.querySelectorAll("img"); // Selects all imgs

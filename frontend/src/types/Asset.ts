@@ -9,3 +9,5 @@ export interface Asset {
     steamProfileUrl: string;
   };
 }
+
+export type AssetType = "grids" | "icons" | "heroes" | "logos";
