@@ -201,3 +201,6 @@ $RECYCLE.BIN/
 
 _NCrunch*
 backend/appsettings.Development.json
+
+# TODO: Remove Later
+/frontend/dist

@@ -31,15 +31,18 @@ export async function fetchIcons(appId: number): Promise<Asset[]> {
 }
 
 function mapAssets(rawData: any[]): Asset[] {
-  //Filters out anything that isn't a jpg, png or jpeg.
+  const allowedExtensions = [".jpg", ".jpeg", ".png"];
+
+  const isAllowed = (url: string) => {
+    if (!url) return false;
+    const cleanUrl = (url?.split("?")[0] ?? "").toLowerCase(); // remove query params. Url may be undefined. Otherwise, 
+    // split at ? to avoid getting extra params, so we can focus on the extension type. [0] is to pick the first element in split instead of [1] which is the params.
+    return allowedExtensions.some(ext => cleanUrl.endsWith(ext)); // A bit hacky, looks for .jpg, etc., returns true if found.
+  };
+
   return rawData
-    .filter((item) => {
-      const url = item.fullImageUrl.toLowerCase();
-      return (
-        url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".jpeg")
-      );
-    })
-    .map((item) => ({
+    .filter(item => isAllowed(item.fullImageUrl) && isAllowed(item.thumbnailImageUrl))
+    .map(item => ({
       fullImageUrl: item.fullImageUrl,
       thumbnailImageUrl: item.thumbnailImageUrl,
       width: item.width,
@@ -51,3 +54,4 @@ function mapAssets(rawData: any[]): Asset[] {
       },
     }));
 }
+

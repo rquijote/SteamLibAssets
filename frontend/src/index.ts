@@ -19,17 +19,17 @@ const heroesBtn = document.getElementById("heroes-btn");
 const logosBtn = document.getElementById("logos-btn");
 const iconsBtn = document.getElementById("icons-btn");
 
-const appId = 5262075 // Temp default id
-assetBtnsClick("grids");
+let appId = 5262075 // Temp default id
+loadAssets("grids");
 
 appIdButton!.addEventListener("click", enterAppIDButtonClick);
 downloadBtn!.addEventListener("click", downloadButtonClick);
-gridsBtn!.addEventListener("click", () => assetBtnsClick("grids"));
-heroesBtn!.addEventListener("click", () => assetBtnsClick("heroes"));
-logosBtn!.addEventListener("click", () => assetBtnsClick("logos"));
-iconsBtn!.addEventListener("click", () => assetBtnsClick("icons"));
+gridsBtn!.addEventListener("click", () => loadAssets("grids"));
+heroesBtn!.addEventListener("click", () => loadAssets("heroes"));
+logosBtn!.addEventListener("click", () => loadAssets("logos"));
+iconsBtn!.addEventListener("click", () => loadAssets("icons"));
 
-async function assetBtnsClick(type: AssetType) {
+async function loadAssets(type: AssetType) {
   let assets;
   switch (type) {
     case "grids": 
@@ -45,8 +45,9 @@ async function assetBtnsClick(type: AssetType) {
     assets = await Fetch.fetchIcons(appId);
     break
   }
-  // Should have a loading icon ihere during this.
-  Render.renderImages(assets);
+  // Should have a loading icon here during this.
+  console.log(assets);
+  Render.renderImages(assets, type);
 }
 
 async function enterAppIDButtonClick() {
@@ -54,8 +55,11 @@ async function enterAppIDButtonClick() {
     document.getElementById("appIdInput")
   )).value;
   if (appIdInputValue == null) return;
+  appId = Number(appIdInputValue);
+  loadAssets("grids");
 }
 
+/* This whole function needs to be redone. */
 async function downloadButtonClick() {
   const imgs = document.querySelectorAll("img"); // Selects all imgs
   let urls: string[] = [];
@@ -65,7 +69,6 @@ async function downloadButtonClick() {
       urls.push(el.src);
     }
   });
-  console.log(urls);
 
   const promises = urls.map(async (url) => {
     const result = await fetch(url);
@@ -105,73 +108,4 @@ function downloadZip(file: any) {
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
-}
-
-/**
- *
- * Fetch Assets Functions
- *
- */
-
-async function getAllAssets(appID: string) {
-  const urls = [
-    `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/library_600x900.jpg`, // library capsule (cover)
-    `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/header.jpg`, // header (background)
-    `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/logo.png`, // transparent logo (logo)
-    `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/capsule_616x353.jpg`, // main capsule
-    `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/capsule_231x87.jpg`, // small capsule
-    `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/library_hero.jpg`, // library hero
-  ];
-  let blobs: (Blob | undefined)[] = [];
-  for (const url of urls) {
-    const blob = await getBlob(url);
-    if (blob) {
-      blobs.push(blob);
-    } else {
-      blobs.push(undefined);
-    }
-  }
-
-  return blobs;
-}
-
-async function getBlob(url: string) {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-    const result = await fetch(url);
-    const blob = await result.blob();
-    return blob;
-  } catch (error: any) {
-    console.error(error.message);
-  }
-}
-
-/**
- *
- * Frontend DOM Functions
- *
- */
-
-function printAllAssets(blobs: (Blob | undefined)[]) {
-  for (let i = 0; i < blobs.length; i++) {
-    let div = document.createElement("div");
-    let img = document.createElement("img");
-    let input = document.createElement("input");
-    input.type = "checkbox";
-    const blob = blobs[i];
-    if (!blob) {
-      img.src =
-        "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
-      input.checked = false;
-    } else {
-      img.src = URL.createObjectURL(blob);
-      input.checked = true;
-    }
-    div.appendChild(img);
-    div.appendChild(input);
-    document.body.appendChild(div);
-  }
 }
