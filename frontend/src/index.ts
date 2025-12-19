@@ -1,5 +1,6 @@
 declare const JSZip: any;
 import * as Fetch from "./fetchAssets.js";
+import * as Render from "./renderAssets.js";
 
 //Shift f1 -> Run Build Task to run TS watch
 console.log("js file loaded");
@@ -32,6 +33,7 @@ async function enterAppIDButtonClick() {
   if (appIdInputValue == null) return;
   const res = await Fetch.fetchGrids(5262075)
   console.log(res);
+  Render.renderImages(res);
 }
 
 async function downloadButtonClick() {

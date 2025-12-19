@@ -1,4 +1,5 @@
 import * as Fetch from "./fetchAssets.js";
+import * as Render from "./renderAssets.js";
 //Shift f1 -> Run Build Task to run TS watch
 console.log("js file loaded");
 /**
@@ -26,6 +27,7 @@ async function enterAppIDButtonClick() {
         return;
     const res = await Fetch.fetchGrids(5262075);
     console.log(res);
+    Render.renderImages(res);
 }
 async function downloadButtonClick() {
     const imgs = document.querySelectorAll("img"); // Selects all imgs

@@ -3,24 +3,41 @@ export async function fetchGrids(appId) {
     const res = await fetch(`${API_BASE}/grids/${appId}`);
     if (!res.ok)
         throw new Error("Failed to fetch grids");
-    return res.json();
+    const rawData = await res.json();
+    return mapAssets(rawData);
 }
 export async function fetchHeroes(appId) {
     const res = await fetch(`${API_BASE}/heroes/${appId}`);
     if (!res.ok)
         throw new Error("Failed to fetch heroes");
-    return res.json();
+    const rawData = await res.json();
+    return mapAssets(rawData);
 }
 export async function fetchLogos(appId) {
     const res = await fetch(`${API_BASE}/logos/${appId}`);
     if (!res.ok)
         throw new Error("Failed to fetch logos");
-    return res.json();
+    const rawData = await res.json();
+    return mapAssets(rawData);
 }
 export async function fetchIcons(appId) {
     const res = await fetch(`${API_BASE}/icons/${appId}`);
     if (!res.ok)
         throw new Error("Failed to fetch icons");
-    return res.json();
+    const rawData = await res.json();
+    return mapAssets(rawData);
+}
+function mapAssets(rawData) {
+    return rawData.map(item => ({
+        fullImageUrl: item.fullImageUrl,
+        thumbnailImageUrl: item.thumbnailImageUrl,
+        width: item.width,
+        height: item.height,
+        author: {
+            name: item.author.name,
+            avatarUrl: item.author.avatarUrl,
+            steamProfileUrl: item.author.steamProfileUrl
+        }
+    }));
 }
 //# sourceMappingURL=fetchAssets.js.map
