@@ -1,5 +1,8 @@
-using craftersmine.SteamGridDBNet;
 using Microsoft.AspNetCore.Mvc;
+using SteamLibAssets.Helpers;
+using SteamLibAssets.Models;
+using SteamLibAssets.Services;
+using craftersmine.SteamGridDBNet;
 
 namespace SteamLibAssets.Controllers
 {
@@ -7,45 +10,69 @@ namespace SteamLibAssets.Controllers
     [Route("api/assets")]
     public class SteamGridDbController : ControllerBase
     {
-        private SteamGridDb CreateClient()
-        {
-            var apiKey = Environment.GetEnvironmentVariable("STEAMGRIDDB_API_KEY");
-            if (string.IsNullOrEmpty(apiKey))
-                throw new InvalidOperationException("SteamGridDB API key not configured");
-            return new SteamGridDb(apiKey);
-        }
+        private readonly SteamGridDbService _sgdbService = new SteamGridDbService();
 
         [HttpGet("grids/{appId}")]
         public async Task<IActionResult> GetGrids(int appId)
         {
-            var sgdb = CreateClient();
-            var grids = await sgdb.GetGridsByGameIdAsync(appId);
-            return Ok(grids);
+            var grids = await _sgdbService.GetGridsAsync(appId);
+
+            var assets = AssetMapper.MapAssets(
+                grids,
+                x => x.FullImageUrl,
+                x => x.ThumbnailImageUrl,
+                x => x.Width,
+                x => x.Height,
+                x => x.Author
+            );
+
+            return Ok(assets);
         }
 
         [HttpGet("heroes/{appId}")]
         public async Task<IActionResult> GetHeroes(int appId)
         {
-            var sgdb = CreateClient();
-            var heroes = await sgdb.GetHeroesByGameIdAsync(appId);
-            return Ok(heroes);
+            var heroes = await _sgdbService.GetHeroesAsync(appId);
+            var assets = AssetMapper.MapAssets(
+                heroes,
+                x => x.FullImageUrl,
+                x => x.ThumbnailImageUrl,
+                x => x.Width,
+                x => x.Height,
+                x => x.Author
+            );
+            return Ok(assets);
         }
 
         [HttpGet("logos/{appId}")]
         public async Task<IActionResult> GetLogos(int appId)
         {
-            var sgdb = CreateClient();
-            var logos = await sgdb.GetLogosByGameIdAsync(appId);
-            return Ok(logos);
+            var logos = await _sgdbService.GetLogosAsync(appId);
+            var assets = AssetMapper.MapAssets(
+                logos,
+                x => x.FullImageUrl,
+                x => x.ThumbnailImageUrl,
+                x => x.Width,
+                x => x.Height,
+                x => x.Author
+            );
+            return Ok(assets);
         }
 
         [HttpGet("icons/{appId}")]
         public async Task<IActionResult> GetIcons(int appId)
         {
-            var sgdb = CreateClient();
-            var icons = await sgdb.GetIconsByGameIdAsync(appId);
-            return Ok(icons);
+            var icons = await _sgdbService.GetIconsAsync(appId);
+            var assets = AssetMapper.MapAssets(
+                icons,
+                x => x.FullImageUrl,
+                x => x.ThumbnailImageUrl,
+                x => x.Width,
+                x => x.Height,
+                x => x.Author
+            );
+            return Ok(assets);
         }
     }
-
 }
+
