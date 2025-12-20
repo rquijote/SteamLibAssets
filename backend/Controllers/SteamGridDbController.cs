@@ -28,12 +28,12 @@ namespace SteamLibAssets.Controllers
                 PageSize = pageSize,
                 TotalItems = totalItems,
                 TotalPages = totalPages,
-                Items = pagedAssets
+                Assets = pagedAssets
             });
         }
 
         [HttpGet("grids/{appId}")]
-        public async Task<IActionResult> GetGrids(int appId, int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetGrids(int appId, int page = 1, int pageSize = 12)
         {
             var grids = await _sgdbService.GetGridsAsync(appId);
             var assets = AssetMapper.MapAssets(
@@ -49,7 +49,7 @@ namespace SteamLibAssets.Controllers
         }
 
         [HttpGet("heroes/{appId}")]
-        public async Task<IActionResult> GetHeroes(int appId, int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetHeroes(int appId, int page = 1, int pageSize = 12)
         {
             var heroes = await _sgdbService.GetHeroesAsync(appId);
             var assets = AssetMapper.MapAssets(
@@ -65,7 +65,7 @@ namespace SteamLibAssets.Controllers
         }
 
         [HttpGet("logos/{appId}")]
-        public async Task<IActionResult> GetLogos(int appId, int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetLogos(int appId, int page = 1, int pageSize = 12)
         {
             var logos = await _sgdbService.GetLogosAsync(appId);
             var assets = AssetMapper.MapAssets(
@@ -81,7 +81,7 @@ namespace SteamLibAssets.Controllers
         }
 
         [HttpGet("icons/{appId}")]
-        public async Task<IActionResult> GetIcons(int appId, int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetIcons(int appId, int page = 1, int pageSize = 12)
         {
             var icons = await _sgdbService.GetIconsAsync(appId);
             var assets = AssetMapper.MapAssets(

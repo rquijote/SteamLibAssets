@@ -1,7 +1,7 @@
 declare const JSZip: any;
 import * as Fetch from "./fetchAssets.js";
 import * as Render from "./renderAssets.js";
-import type { AssetType } from "./types/Asset.js";
+import type { AssetType, PaginatedAssets } from "./types/Asset.js";
 
 //Shift f1 -> Run Build Task to run TS watch
 console.log("js file loaded");
@@ -30,24 +30,24 @@ logosBtn!.addEventListener("click", () => loadAssets("logos"));
 iconsBtn!.addEventListener("click", () => loadAssets("icons"));
 
 async function loadAssets(type: AssetType) {
-  let assets;
+  let fetchData: PaginatedAssets;
   switch (type) {
     case "grids": 
-    assets = await Fetch.fetchGrids(appId);
+    fetchData = await Fetch.fetchGrids(appId);
     break
      case "heroes": 
-    assets = await Fetch.fetchHeroes(appId);
+    fetchData = await Fetch.fetchHeroes(appId);
     break
      case "logos": 
-    assets = await Fetch.fetchLogos(appId);
+    fetchData = await Fetch.fetchLogos(appId);
     break
      case "icons": 
-    assets = await Fetch.fetchIcons(appId);
+    fetchData = await Fetch.fetchIcons(appId);
     break
   }
   // Should have a loading icon here during this.
-  console.log(assets);
-  Render.renderImages(assets, type);
+  console.log(fetchData);
+  Render.renderImages(fetchData, type);
 }
 
 async function enterAppIDButtonClick() {

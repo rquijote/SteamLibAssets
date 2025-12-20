@@ -204,3 +204,5 @@ backend/appsettings.Development.json
 
 # TODO: Remove Later
 /frontend/dist
+frontend/dist/types/Asset.d.ts.map
+frontend/dist/types/Asset.d.ts

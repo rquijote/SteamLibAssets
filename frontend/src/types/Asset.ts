@@ -11,3 +11,11 @@ export interface Asset {
 }
 
 export type AssetType = "grids" | "icons" | "heroes" | "logos";
+
+export type PaginatedAssets = {
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  assets: Asset[];
+}
