@@ -14,14 +14,14 @@ namespace SteamLibAssets.Helpers
             return AllowedExtensions.Any(ext => cleanUrl.EndsWith(ext));
         }
 
-        public static List<Asset> MapAssets<T>(IEnumerable<T> items,
+        public static List<Asset> MapAssets<T>(IEnumerable<T> assets,
             Func<T, string> getFullUrl,
             Func<T, string> getThumbUrl,
             Func<T, int> getWidth,
             Func<T, int> getHeight,
             Func<T, SteamAuthor?> getAuthor)
         {
-            return items
+            return assets
                 .Select(x => new Asset
                 {
                     FullImageUrl = getFullUrl(x) ?? "",

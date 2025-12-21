@@ -1,33 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <!-- Hacky export to remove TS error asking for global exports variable -->
-    <script> var exports = {}; </script> 
+    <script>
+      var exports = {};
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     <script src="./frontend/dist/index.js" type="module" defer></script>
-    <link rel="stylesheet" href="./frontend/styles/index.css">
-</head>
-<body>
+    <link rel="stylesheet" href="./frontend/styles/index.css" />
+  </head>
+  <body>
     <h1>Steam Library Assets Downloader</h1>
     <div>
-        <label>Enter App ID</label>
-        <input type="text" id="appIdInput" name="appIdInput" autocomplete="off" value="237930">
-        <button id="enterAppIdBtn">Enter</button>
-        <button id="downloadBtn">Download</button>
-        <div id="assets-container">
-            <div>
-                <button type="button" class="asset-btns" id="grids-btn">Grids</button>
-                <button type="button" class="asset-btns" id="heroes-btn">Heroes</button>
-                <button type="button" class="asset-btns" id="logos-btn">Logos</button>
-                <button type="button" class="asset-btns" id="icons-btn">Icons</button>
-            </div>
-            <div id="assets-grid">
-
-            </div>
+      <label>Enter App ID</label>
+      <input
+        type="text"
+        id="appIdInput"
+        name="appIdInput"
+        autocomplete="off"
+        value="237930"
+      />
+      <button id="enterAppIdBtn">Enter</button>
+      <button id="downloadBtn">Download</button>
+      <div id="assets-container">
+        <div>
+          <button type="button" class="asset-btns" id="grids-btn">Grids</button>
+          <button type="button" class="asset-btns" id="heroes-btn">
+            Heroes
+          </button>
+          <button type="button" class="asset-btns" id="logos-btn">Logos</button>
+          <button type="button" class="asset-btns" id="icons-btn">Icons</button>
         </div>
+        <div id="assets-grid-wrapper">
+          <div class="pagination-btns"></div>
+          <div id="assets-grid"></div>
+          <div class="pagination-btns"></div>
+        </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

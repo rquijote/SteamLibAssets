@@ -32,7 +32,7 @@ namespace SteamLibAssets.Controllers
             });
         }
 
-        [HttpGet("grids/{appId}")]
+        [HttpGet("grids/{appId}/{page}")]
         public async Task<IActionResult> GetGrids(int appId, int page = 1, int pageSize = 12)
         {
             var grids = await _sgdbService.GetGridsAsync(appId);
@@ -48,7 +48,7 @@ namespace SteamLibAssets.Controllers
             return PaginateAssets(assets, page, pageSize);
         }
 
-        [HttpGet("heroes/{appId}")]
+        [HttpGet("heroes/{appId}/{page}")]
         public async Task<IActionResult> GetHeroes(int appId, int page = 1, int pageSize = 12)
         {
             var heroes = await _sgdbService.GetHeroesAsync(appId);
@@ -64,7 +64,7 @@ namespace SteamLibAssets.Controllers
             return PaginateAssets(assets, page, pageSize);
         }
 
-        [HttpGet("logos/{appId}")]
+        [HttpGet("logos/{appId}/{page}")]
         public async Task<IActionResult> GetLogos(int appId, int page = 1, int pageSize = 12)
         {
             var logos = await _sgdbService.GetLogosAsync(appId);
@@ -80,7 +80,7 @@ namespace SteamLibAssets.Controllers
             return PaginateAssets(assets, page, pageSize);
         }
 
-        [HttpGet("icons/{appId}")]
+        [HttpGet("icons/{appId}/{page}")]
         public async Task<IActionResult> GetIcons(int appId, int page = 1, int pageSize = 12)
         {
             var icons = await _sgdbService.GetIconsAsync(appId);

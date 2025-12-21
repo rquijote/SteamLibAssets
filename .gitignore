@@ -206,3 +206,13 @@ backend/appsettings.Development.json
 /frontend/dist
 frontend/dist/types/Asset.d.ts.map
 frontend/dist/types/Asset.d.ts
+frontend/dist/fetchAssets.js
+frontend/dist/fetchAssets.js.map
+frontend/dist/index.js
+frontend/dist/index.js.map
+frontend/dist/renderAssets.d.ts
+frontend/dist/renderAssets.d.ts.map
+frontend/dist/renderAssets.js
+frontend/dist/renderAssets.js.map
+frontend/dist/types/Asset.d.ts
+frontend/dist/types/Asset.d.ts.map
