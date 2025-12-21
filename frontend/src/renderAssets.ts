@@ -1,8 +1,5 @@
 import type { PaginatedAssets, AssetType } from "./types/Asset.js";
 
-// Potentially create multiple prints for each asset type. For now printImages()
-// since there's no identifiable differences between asset types yet. 
-
 export default function renderAssetsGrid(fetchData: PaginatedAssets, type: AssetType) {
     renderImages(fetchData, type);
     renderPaginationBtns(fetchData, type);

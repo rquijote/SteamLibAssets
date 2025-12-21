@@ -1,6 +1,6 @@
 declare const JSZip: any;
 import * as Fetch from "./fetchAssets.js";
-import * as Render from "./renderAssets.js";
+import RenderAssetsGrid from "./renderAssets.js";
 import type { AssetType, PaginatedAssets } from "./types/Asset.js";
 
 //Shift f1 -> Run Build Task to run TS watch
@@ -20,34 +20,35 @@ const logosBtn = document.getElementById("logos-btn");
 const iconsBtn = document.getElementById("icons-btn");
 
 let appId = 5262075 // Temp default id
-loadAssets("grids");
+const firstPage = 1;
+loadAssets("grids", firstPage);
 
 appIdButton!.addEventListener("click", enterAppIDButtonClick);
 downloadBtn!.addEventListener("click", downloadButtonClick);
-gridsBtn!.addEventListener("click", () => loadAssets("grids"));
-heroesBtn!.addEventListener("click", () => loadAssets("heroes"));
-logosBtn!.addEventListener("click", () => loadAssets("logos"));
-iconsBtn!.addEventListener("click", () => loadAssets("icons"));
+gridsBtn!.addEventListener("click", () => loadAssets("grids", firstPage));
+heroesBtn!.addEventListener("click", () => loadAssets("heroes", firstPage));
+logosBtn!.addEventListener("click", () => loadAssets("logos", firstPage));
+iconsBtn!.addEventListener("click", () => loadAssets("icons", firstPage));
 
-async function loadAssets(type: AssetType) {
+async function loadAssets(type: AssetType, pageNum: number) {
   let fetchData: PaginatedAssets;
   switch (type) {
     case "grids": 
-    fetchData = await Fetch.fetchGrids(appId);
+    fetchData = await Fetch.fetchGrids(appId, pageNum);
     break
      case "heroes": 
-    fetchData = await Fetch.fetchHeroes(appId);
+    fetchData = await Fetch.fetchHeroes(appId, pageNum);
     break
      case "logos": 
-    fetchData = await Fetch.fetchLogos(appId);
+    fetchData = await Fetch.fetchLogos(appId, pageNum);
     break
      case "icons": 
-    fetchData = await Fetch.fetchIcons(appId);
+    fetchData = await Fetch.fetchIcons(appId, firstPage);
     break
   }
   // Should have a loading icon here during this.
   console.log(fetchData);
-  Render.renderImages(fetchData, type);
+  RenderAssetsGrid(fetchData, type);
 }
 
 async function enterAppIDButtonClick() {
@@ -56,7 +57,7 @@ async function enterAppIDButtonClick() {
   )).value;
   if (appIdInputValue == null) return;
   appId = Number(appIdInputValue);
-  loadAssets("grids");
+  loadAssets("grids", firstPage);
 }
 
 /* This whole function needs to be redone. */
