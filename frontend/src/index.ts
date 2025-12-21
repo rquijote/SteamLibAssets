@@ -30,7 +30,7 @@ heroesBtn!.addEventListener("click", () => loadAssets("heroes", firstPage));
 logosBtn!.addEventListener("click", () => loadAssets("logos", firstPage));
 iconsBtn!.addEventListener("click", () => loadAssets("icons", firstPage));
 
-async function loadAssets(type: AssetType, pageNum: number) {
+export async function loadAssets(type: AssetType, pageNum: number) {
   let fetchData: PaginatedAssets;
   switch (type) {
     case "grids": 
