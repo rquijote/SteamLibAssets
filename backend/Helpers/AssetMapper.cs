@@ -13,33 +13,31 @@ namespace SteamLibAssets.Helpers
             var cleanUrl = url.Split('?')[0].ToLowerInvariant();
             return AllowedExtensions.Any(ext => cleanUrl.EndsWith(ext));
         }
-
-        public static List<Asset> MapAssets<T>(IEnumerable<T> assets,
-            Func<T, string> getFullUrl,
-            Func<T, string> getThumbUrl,
-            Func<T, int> getWidth,
-            Func<T, int> getHeight,
-            Func<T, SteamAuthor?> getAuthor)
+        public static Asset MapAsset(SteamGridAsset asset)
+        {
+            return new Asset
+            {
+                FullImageUrl = asset.FullImageUrl,
+                ThumbnailImageUrl = asset.ThumbnailImageUrl,
+                Width = asset.Width,
+                Height = asset.Height,
+                Author = new Author
+                {
+                    Name = asset.Author.Name,
+                    AvatarUrl = asset.Author.AvatarUrl,
+                    SteamProfileUrl = asset.Author.SteamProfileUrl
+                }
+            };
+        }
+        public static List<Asset> MapAssets(IEnumerable<SteamGridAsset> assets)
         {
             return assets
-                .Select(x => new Asset
-                {
-                    FullImageUrl = getFullUrl(x) ?? "",
-                    ThumbnailImageUrl = getThumbUrl(x) ?? "",
-                    Width = getWidth(x),
-                    Height = getHeight(x),
-                    Author = getAuthor(x) == null
-                        ? new Author { Name = "", AvatarUrl = "", SteamProfileUrl = "" }
-                        : new Author
-                        {
-                            Name = getAuthor(x)?.Name ?? "",
-                            AvatarUrl = getAuthor(x)?.AvatarUrl ?? "",
-                            SteamProfileUrl = getAuthor(x)?.SteamProfileUrl ?? ""
-                        }
-                })
+                .Select(MapAsset)
                 .Where(a => IsAllowed(a.FullImageUrl) && IsAllowed(a.ThumbnailImageUrl))
                 .ToList();
         }
+
+
     }
 }
 

@@ -3,6 +3,7 @@ using SteamLibAssets.Helpers;
 using SteamLibAssets.Models;
 using SteamLibAssets.Services;
 using craftersmine.SteamGridDBNet;
+using System;
 
 namespace SteamLibAssets.Controllers
 {
@@ -32,18 +33,29 @@ namespace SteamLibAssets.Controllers
             });
         }
 
+        [HttpGet("all/{appId}")]
+        public async Task<IActionResult> Get(int appId)
+        {
+            var grids = await _sgdbService.GetGridsAsync(appId);
+            var heroes = await _sgdbService.GetLogosAsync(appId);
+            var logos = await _sgdbService.GetLogosAsync(appId);
+            var icons = await _sgdbService.GetIconsAsync(appId);
+
+            return Ok(new
+            {
+                Grid = grids[0],
+                Hero = heroes[0],
+                Logo = logos[0],
+                Icon = icons[0]
+            }); // Create new AllAssets function or return a variable for it here.
+        }
+
         [HttpGet("grids/{appId}/{page}")]
         public async Task<IActionResult> GetGrids(int appId, int page = 1, int pageSize = 12)
         {
             var grids = await _sgdbService.GetGridsAsync(appId);
             var assets = AssetMapper.MapAssets(
-                grids,
-                x => x.FullImageUrl,
-                x => x.ThumbnailImageUrl,
-                x => x.Width,
-                x => x.Height,
-                x => x.Author
-            );
+                grids.Select(grid => grid.ToAssetView()));
 
             return PaginateAssets(assets, page, pageSize);
         }
@@ -53,13 +65,7 @@ namespace SteamLibAssets.Controllers
         {
             var heroes = await _sgdbService.GetHeroesAsync(appId);
             var assets = AssetMapper.MapAssets(
-                heroes,
-                x => x.FullImageUrl,
-                x => x.ThumbnailImageUrl,
-                x => x.Width,
-                x => x.Height,
-                x => x.Author
-            );
+                heroes.Select(hero => hero.ToAssetView()));
 
             return PaginateAssets(assets, page, pageSize);
         }
@@ -69,13 +75,7 @@ namespace SteamLibAssets.Controllers
         {
             var logos = await _sgdbService.GetLogosAsync(appId);
             var assets = AssetMapper.MapAssets(
-                logos,
-                x => x.FullImageUrl,
-                x => x.ThumbnailImageUrl,
-                x => x.Width,
-                x => x.Height,
-                x => x.Author
-            );
+                logos.Select(logo => logo.ToAssetView()));
 
             return PaginateAssets(assets, page, pageSize);
         }
@@ -85,13 +85,7 @@ namespace SteamLibAssets.Controllers
         {
             var icons = await _sgdbService.GetIconsAsync(appId);
             var assets = AssetMapper.MapAssets(
-                icons,
-                x => x.FullImageUrl,
-                x => x.ThumbnailImageUrl,
-                x => x.Width,
-                x => x.Height,
-                x => x.Author
-            );
+                icons.Select(icon => icon.ToAssetView()));
 
             return PaginateAssets(assets, page, pageSize);
         }

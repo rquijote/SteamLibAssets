@@ -18,4 +18,11 @@ export type PaginatedAssets = {
   totalItems: number;
   totalPages: number;
   assets: Asset[];
-}
+};
+
+export type DownloadAssets = {
+  Grid: Asset;
+  Hero: Asset;
+  Logo: Asset;
+  Icon: Asset;
+};

@@ -30,4 +30,5 @@ export async function fetchIcons(appId: number, pageNum: number): Promise<Pagina
   return data;
 }
 
+//export async function fetchAll()
 
