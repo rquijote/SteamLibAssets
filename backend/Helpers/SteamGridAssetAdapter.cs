@@ -5,7 +5,7 @@ namespace SteamLibAssets.Helpers
 {
     public static class SteamGridDbAdapters
     {
-        private static SteamGridAsset BuildAssetView(
+        private static SteamGridAsset BuildSteamAsset(
             string full,
             string thumb,
             int width,
@@ -29,19 +29,19 @@ namespace SteamLibAssets.Helpers
 
         // Grid adapter
         public static SteamGridAsset ToAssetView(this SteamGridDbGrid g) =>
-            BuildAssetView(g.FullImageUrl, g.ThumbnailImageUrl, g.Width, g.Height, g.Author);
+            BuildSteamAsset(g.FullImageUrl, g.ThumbnailImageUrl, g.Width, g.Height, g.Author);
 
         // Hero adapter
         public static SteamGridAsset ToAssetView(this SteamGridDbHero h) =>
-            BuildAssetView(h.FullImageUrl, h.ThumbnailImageUrl, h.Width, h.Height, h.Author);
+            BuildSteamAsset(h.FullImageUrl, h.ThumbnailImageUrl, h.Width, h.Height, h.Author);
 
         // Icon adapter
         public static SteamGridAsset ToAssetView(this SteamGridDbIcon i) =>
-            BuildAssetView(i.FullImageUrl, i.ThumbnailImageUrl, i.Width, i.Height, i.Author);
+            BuildSteamAsset(i.FullImageUrl, i.ThumbnailImageUrl, i.Width, i.Height, i.Author);
 
         // Logo adapter
         public static SteamGridAsset ToAssetView(this SteamGridDbLogo l) =>
-            BuildAssetView(l.FullImageUrl, l.ThumbnailImageUrl, l.Width, l.Height, l.Author);
+            BuildSteamAsset(l.FullImageUrl, l.ThumbnailImageUrl, l.Width, l.Height, l.Author);
     }
 }
 

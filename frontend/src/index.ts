@@ -1,6 +1,6 @@
 declare const JSZip: any;
 import * as Fetch from "./fetchAssets.js";
-import RenderAssetsGrid from "./renderAssets.js";
+import * as Render from "./renderAssets.js";
 import type { AssetType, PaginatedAssets } from "./types/Asset.js";
 
 //Shift f1 -> Run Build Task to run TS watch
@@ -22,6 +22,7 @@ const iconsBtn = document.getElementById("icons-btn");
 let appId = 5262075 // Temp default id
 const firstPage = 1;
 loadAssets("grids", firstPage);
+loadDefaultDownloadAssets();
 
 appIdButton!.addEventListener("click", enterAppIDButtonClick);
 downloadBtn!.addEventListener("click", downloadButtonClick);
@@ -30,8 +31,9 @@ heroesBtn!.addEventListener("click", () => loadAssets("heroes", firstPage));
 logosBtn!.addEventListener("click", () => loadAssets("logos", firstPage));
 iconsBtn!.addEventListener("click", () => loadAssets("icons", firstPage));
 
-export async function loadFirstImages() {
-  
+export async function loadDefaultDownloadAssets() {
+  const allAssets = await Fetch.fetchAll(appId);
+  console.log(allAssets);
 }
 
 export async function loadAssets(type: AssetType, pageNum: number) {
@@ -52,7 +54,7 @@ export async function loadAssets(type: AssetType, pageNum: number) {
   }
   // Should have a loading icon here during this.
   console.log(fetchData);
-  RenderAssetsGrid(fetchData, type);
+  Render.renderAssetsGrid(fetchData, type);
 }
 
 async function enterAppIDButtonClick() {

@@ -41,13 +41,18 @@ namespace SteamLibAssets.Controllers
             var logos = await _sgdbService.GetLogosAsync(appId);
             var icons = await _sgdbService.GetIconsAsync(appId);
 
+            var grid = AssetMapper.MapAsset(grids[0].ToAssetView());
+            var hero = AssetMapper.MapAsset(heroes[0].ToAssetView());
+            var logo = AssetMapper.MapAsset(logos[0].ToAssetView());
+            var icon = AssetMapper.MapAsset(icons[0].ToAssetView());
+
             return Ok(new
             {
-                Grid = grids[0],
-                Hero = heroes[0],
-                Logo = logos[0],
-                Icon = icons[0]
-            }); // Create new AllAssets function or return a variable for it here.
+                Grid = grid,
+                Hero = hero,
+                Logo = logo,
+                Icon = icon
+            }); 
         }
 
         [HttpGet("grids/{appId}/{page}")]

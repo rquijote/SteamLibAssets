@@ -1,4 +1,4 @@
-import type { Asset, PaginatedAssets } from "./types/Asset.js";
+import type { Asset, DownloadAssets, PaginatedAssets } from "./types/Asset.js";
 
 const API_BASE = "http://localhost:5062/api/assets"; // temp port for local host
 
@@ -30,5 +30,10 @@ export async function fetchIcons(appId: number, pageNum: number): Promise<Pagina
   return data;
 }
 
-//export async function fetchAll()
+export async function fetchAll(appId: number): Promise<DownloadAssets> {
+  const res = await fetch(`${API_BASE}/all/${appId}`);
+  if (!res.ok) throw new Error("Failed to fetch all assets");
+  const data: DownloadAssets = await res.json();
+  return data;
+}
 

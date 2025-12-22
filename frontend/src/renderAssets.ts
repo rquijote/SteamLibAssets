@@ -1,7 +1,13 @@
 import type { PaginatedAssets, AssetType } from "./types/Asset.js";
 import { loadAssets } from "./index.js";
 
-export default function renderAssetsGrid(
+/**
+ * 
+ * Render Assets Grid
+ * 
+ */
+
+export function renderAssetsGrid(
   fetchData: PaginatedAssets,
   type: AssetType
 ) {
@@ -101,3 +107,9 @@ function appendPaginationUl(paginationUl: HTMLUListElement, type: AssetType) {
     div.appendChild(clone);
   }
 }
+
+/**
+ * 
+ * Render Assets Download
+ * 
+ */
