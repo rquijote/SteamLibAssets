@@ -21,8 +21,8 @@ export type PaginatedAssets = {
 };
 
 export type DownloadAssets = {
-  Grid: Asset;
-  Hero: Asset;
-  Logo: Asset;
-  Icon: Asset;
+  grid: Asset;
+  hero: Asset;
+  logo: Asset;
+  icon: Asset;
 };

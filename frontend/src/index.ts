@@ -1,4 +1,4 @@
-declare const JSZip: any;
+import downloadAssets from "./downloadAssets.js";
 import * as Fetch from "./fetchAssets.js";
 import * as Render from "./renderAssets.js";
 import type { AssetType, PaginatedAssets } from "./types/Asset.js";
@@ -25,7 +25,7 @@ loadAssets("grids", firstPage);
 loadDefaultDownloadAssets();
 
 appIdButton!.addEventListener("click", enterAppIDButtonClick);
-downloadBtn!.addEventListener("click", downloadButtonClick);
+downloadBtn!.addEventListener("click", () => downloadAssets(appId));
 gridsBtn!.addEventListener("click", () => loadAssets("grids", firstPage));
 heroesBtn!.addEventListener("click", () => loadAssets("heroes", firstPage));
 logosBtn!.addEventListener("click", () => loadAssets("logos", firstPage));
@@ -33,7 +33,7 @@ iconsBtn!.addEventListener("click", () => loadAssets("icons", firstPage));
 
 export async function loadDefaultDownloadAssets() {
   const allAssets = await Fetch.fetchAll(appId);
-  console.log(allAssets);
+  Render.renderAssetsDownload(allAssets);
 }
 
 export async function loadAssets(type: AssetType, pageNum: number) {
@@ -64,55 +64,4 @@ async function enterAppIDButtonClick() {
   if (appIdInputValue == null) return;
   appId = Number(appIdInputValue);
   loadAssets("grids", firstPage);
-}
-
-/* This whole function needs to be redone. */
-async function downloadButtonClick() {
-  const imgs = document.querySelectorAll("img"); // Selects all imgs
-  let urls: string[] = [];
-  imgs.forEach((el) => {
-    if ((el.nextElementSibling! as HTMLInputElement).checked) {
-      // Presumes all next element of img are an HTMLInputElement.
-      urls.push(el.src);
-    }
-  });
-
-  const promises = urls.map(async (url) => {
-    const result = await fetch(url);
-    const blob = await result.blob();
-    return blob;
-  });
-
-    const imgNames : string[] = [
-    "main_capsule_img",
-    "small_capsule_img",
-    "header_img",
-    "library_capsule_img",
-    "2xlibrary_capsule_img",
-    "library_hero_img",
-  ];
-
-
-  const blobs = await Promise.all(promises);
-  const zip = new JSZip();
-  blobs.forEach((blob, index) => {
-    zip.file(`${index}_${imgNames[index]}.jpg`, blob);
-  });
-
-  const zipFile = await zip.generateAsync({type: "blob"});
-  console.log(zipFile);
-
-  downloadZip(zipFile);
-}
-
-function downloadZip(file: any) {
-  const a = document.createElement("a");
-  a.download = "test.zip";
-  const url = URL.createObjectURL(file);
-  a.href = url;
-  a.style.display = "none";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
 }

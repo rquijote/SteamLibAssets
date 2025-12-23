@@ -34,17 +34,26 @@ namespace SteamLibAssets.Controllers
         }
 
         [HttpGet("all/{appId}")]
-        public async Task<IActionResult> Get(int appId)
+        public async Task<IActionResult> GetAll(int appId)
         {
             var grids = await _sgdbService.GetGridsAsync(appId);
-            var heroes = await _sgdbService.GetLogosAsync(appId);
+            var heroes = await _sgdbService.GetHeroesAsync(appId);
             var logos = await _sgdbService.GetLogosAsync(appId);
             var icons = await _sgdbService.GetIconsAsync(appId);
 
-            var grid = AssetMapper.MapAsset(grids[0].ToAssetView());
-            var hero = AssetMapper.MapAsset(heroes[0].ToAssetView());
-            var logo = AssetMapper.MapAsset(logos[0].ToAssetView());
-            var icon = AssetMapper.MapAsset(icons[0].ToAssetView());
+            var grid = grids
+                 .Select(g => AssetMapper.MapAsset(g.ToAssetView()))
+                 .FirstOrDefault(a => a != null);
+            var hero = heroes
+                .Select(h => AssetMapper.MapAsset(h.ToAssetView()))
+                .FirstOrDefault(a => a != null);
+            var logo = logos
+                .Select(l => AssetMapper.MapAsset(l.ToAssetView()))
+                .FirstOrDefault(a => a != null);
+            var icon = icons
+                .Select(i => AssetMapper.MapAsset(i.ToAssetView()))
+                .FirstOrDefault(a => a != null);
+
 
             return Ok(new
             {
@@ -93,6 +102,28 @@ namespace SteamLibAssets.Controllers
                 icons.Select(icon => icon.ToAssetView()));
 
             return PaginateAssets(assets, page, pageSize);
+        }
+
+        [HttpGet("proxy")]
+        public async Task<IActionResult> Proxy([FromQuery] string url)
+        {
+            if (string.IsNullOrEmpty(url)) return BadRequest("No URL provided.");
+
+            try
+            {
+                using var client = new HttpClient();
+                var response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+
+                var bytes = await response.Content.ReadAsByteArrayAsync();
+                var contentType = response.Content.Headers.ContentType?.ToString() ?? "application/octet-stream";
+
+                return File(bytes, contentType);
+            }
+            catch
+            {
+                return BadRequest("Failed to fetch image.");
+            }
         }
     }
 }

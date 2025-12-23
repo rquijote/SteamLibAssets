@@ -1,4 +1,4 @@
-import type { PaginatedAssets, AssetType } from "./types/Asset.js";
+import type { PaginatedAssets, AssetType, DownloadAssets } from "./types/Asset.js";
 import { loadAssets } from "./index.js";
 
 /**
@@ -17,7 +17,7 @@ export function renderAssetsGrid(
 
 function renderImages(fetchData: PaginatedAssets, type: AssetType) {
   const assetsGrid = document.getElementById("assets-grid");
-  assetsGrid?.replaceChildren();
+  assetsGrid!.replaceChildren();
   fetchData.assets.forEach((asset) => {
     const img = document.createElement("img");
     img.src = asset.thumbnailImageUrl;
@@ -113,3 +113,25 @@ function appendPaginationUl(paginationUl: HTMLUListElement, type: AssetType) {
  * Render Assets Download
  * 
  */
+
+export function renderAssetsDownload(downloadData: DownloadAssets) {
+  const assetsDownloadDiv = document.getElementById("assets-download");
+  assetsDownloadDiv!.replaceChildren(); // clear previous content
+
+  Object.entries(downloadData).forEach(([key, asset]) => {
+    const img = document.createElement("img");
+    img.src = asset.fullImageUrl;  
+    img.alt = key;                  
+    img.width = 300;      
+    img.height = 300;     
+    img.style.margin = "4px";      
+    img.classList = "downloadImg";
+
+    const checkbox = document.createElement("input")
+    checkbox.type = "checkbox";
+    checkbox.checked = true;
+    
+    assetsDownloadDiv!.appendChild(img);
+    assetsDownloadDiv!.appendChild(checkbox);
+  });
+}

@@ -13,8 +13,11 @@ namespace SteamLibAssets.Helpers
             var cleanUrl = url.Split('?')[0].ToLowerInvariant();
             return AllowedExtensions.Any(ext => cleanUrl.EndsWith(ext));
         }
-        public static Asset MapAsset(SteamGridAsset asset)
+        public static Asset? MapAsset(SteamGridAsset asset)
         {
+            if (!IsAllowed(asset.FullImageUrl) || !IsAllowed(asset.ThumbnailImageUrl))
+                return null;
+
             return new Asset
             {
                 FullImageUrl = asset.FullImageUrl,
@@ -29,15 +32,15 @@ namespace SteamLibAssets.Helpers
                 }
             };
         }
+
         public static List<Asset> MapAssets(IEnumerable<SteamGridAsset> assets)
         {
             return assets
                 .Select(MapAsset)
-                .Where(a => IsAllowed(a.FullImageUrl) && IsAllowed(a.ThumbnailImageUrl))
+                .Where(a => a != null)
+                .Cast<Asset>()
                 .ToList();
         }
-
-
     }
 }
 
