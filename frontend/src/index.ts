@@ -21,15 +21,15 @@ const iconsBtn = document.getElementById("icons-btn");
 
 let appId = 5262075 // Temp default id
 const firstPage = 1;
-loadAssets("grids", firstPage);
+loadAssets("grid", firstPage);
 loadDefaultDownloadAssets();
 
 appIdButton!.addEventListener("click", enterAppIDButtonClick);
 downloadBtn!.addEventListener("click", () => downloadAssets(appId));
-gridsBtn!.addEventListener("click", () => loadAssets("grids", firstPage));
-heroesBtn!.addEventListener("click", () => loadAssets("heroes", firstPage));
-logosBtn!.addEventListener("click", () => loadAssets("logos", firstPage));
-iconsBtn!.addEventListener("click", () => loadAssets("icons", firstPage));
+gridsBtn!.addEventListener("click", () => loadAssets("grid", firstPage));
+heroesBtn!.addEventListener("click", () => loadAssets("hero", firstPage));
+logosBtn!.addEventListener("click", () => loadAssets("logo", firstPage));
+iconsBtn!.addEventListener("click", () => loadAssets("icon", firstPage));
 
 export async function loadDefaultDownloadAssets() {
   const allAssets = await Fetch.fetchAll(appId);
@@ -39,16 +39,16 @@ export async function loadDefaultDownloadAssets() {
 export async function loadAssets(type: AssetType, pageNum: number) {
   let fetchData: PaginatedAssets;
   switch (type) {
-    case "grids": 
+    case "grid": 
     fetchData = await Fetch.fetchGrids(appId, pageNum);
     break
-     case "heroes": 
+     case "hero": 
     fetchData = await Fetch.fetchHeroes(appId, pageNum);
     break
-     case "logos": 
+     case "logo": 
     fetchData = await Fetch.fetchLogos(appId, pageNum);
     break
-     case "icons": 
+     case "icon": 
     fetchData = await Fetch.fetchIcons(appId, firstPage);
     break
   }
@@ -63,5 +63,5 @@ async function enterAppIDButtonClick() {
   )).value;
   if (appIdInputValue == null) return;
   appId = Number(appIdInputValue);
-  loadAssets("grids", firstPage);
+  loadAssets("grid", firstPage);
 }

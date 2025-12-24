@@ -10,7 +10,7 @@ export interface Asset {
   };
 }
 
-export type AssetType = "grids" | "icons" | "heroes" | "logos";
+export type AssetType = "grid" | "icon" | "hero" | "logo";
 
 export type PaginatedAssets = {
   page: number;

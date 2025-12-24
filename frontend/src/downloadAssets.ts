@@ -18,7 +18,7 @@ export default async function downloadAssets(appId: number) {
         next.type === "checkbox" &&
         next.checked
       ) {
-        assetsToDownload.push({ url: el.src, name: `${el.alt}.png` });
+        assetsToDownload.push({ url: el.src, name: `${el.alt}.png` }); 
       }
     }
 
@@ -27,9 +27,10 @@ export default async function downloadAssets(appId: number) {
       return;
     }
 
-    // Fetch blobs
+    // Fetch blobs. JSZip Needs blobs. 
     const blobs = await Promise.all(
       assetsToDownload.map(async (downloadAsset) => {
+        // Need to query through a proxy to avoid CORS problems when downloading.
         const queryUrl = new URL("http://localhost:5062/api/assets/proxy");
         // safely encode URL as query parameter (issues with .png, .jpeg, etc.)
         queryUrl.searchParams.set("url", downloadAsset.url);

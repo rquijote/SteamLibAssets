@@ -1,16 +1,18 @@
-import type { PaginatedAssets, AssetType, DownloadAssets } from "./types/Asset.js";
+import type {
+  PaginatedAssets,
+  AssetType,
+  DownloadAssets,
+  Asset
+} from "./types/Asset.js";
 import { loadAssets } from "./index.js";
 
 /**
- * 
+ *
  * Render Assets Grid
- * 
+ *
  */
 
-export function renderAssetsGrid(
-  fetchData: PaginatedAssets,
-  type: AssetType
-) {
+export function renderAssetsGrid(fetchData: PaginatedAssets, type: AssetType) {
   renderImages(fetchData, type);
   renderPaginationBtns(fetchData, type);
 }
@@ -22,6 +24,7 @@ function renderImages(fetchData: PaginatedAssets, type: AssetType) {
     const img = document.createElement("img");
     img.src = asset.thumbnailImageUrl;
     assetsGrid!.appendChild(img);
+    img.addEventListener("click", () => replaceAssetsDownload(asset, type))
   });
 }
 
@@ -109,9 +112,9 @@ function appendPaginationUl(paginationUl: HTMLUListElement, type: AssetType) {
 }
 
 /**
- * 
+ *
  * Render Assets Download
- * 
+ *
  */
 
 export function renderAssetsDownload(downloadData: DownloadAssets) {
@@ -120,18 +123,26 @@ export function renderAssetsDownload(downloadData: DownloadAssets) {
 
   Object.entries(downloadData).forEach(([key, asset]) => {
     const img = document.createElement("img");
-    img.src = asset.fullImageUrl;  
-    img.alt = key;                  
-    img.width = 300;      
-    img.height = 300;     
-    img.style.margin = "4px";      
+    img.src = asset.fullImageUrl;
+    img.alt = key;
+    img.width = 300;
+    img.height = 300;
+    img.style.margin = "4px";
     img.classList = "downloadImg";
+    img.id = `${key}-download`;
 
-    const checkbox = document.createElement("input")
+    const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.checked = true;
-    
+
     assetsDownloadDiv!.appendChild(img);
     assetsDownloadDiv!.appendChild(checkbox);
   });
+}
+
+function replaceAssetsDownload(asset: Asset, type: AssetType) {
+  const replaceAsset = document.getElementById(`${type}-download`) as HTMLImageElement;
+  console.log(asset);
+  if (replaceAsset == null) return;
+  replaceAsset.src = asset.fullImageUrl;
 }
