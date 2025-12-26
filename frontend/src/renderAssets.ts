@@ -2,7 +2,7 @@ import type {
   PaginatedAssets,
   AssetType,
   DownloadAssets,
-  Asset
+  Asset,
 } from "./types/Asset.js";
 import { loadAssets } from "./index.js";
 
@@ -19,12 +19,34 @@ export function renderAssetsGrid(fetchData: PaginatedAssets, type: AssetType) {
 
 function renderImages(fetchData: PaginatedAssets, type: AssetType) {
   const assetsGrid = document.getElementById("assets-grid");
-  assetsGrid!.replaceChildren();
+  if (assetsGrid == null) {
+    console.error("No assets-grid found.");
+    return;
+  }
+  assetsGrid.replaceChildren();
   fetchData.assets.forEach((asset) => {
     const img = document.createElement("img");
     img.src = asset.thumbnailImageUrl;
-    assetsGrid!.appendChild(img);
-    img.addEventListener("click", () => replaceAssetsDownload(asset, type))
+
+    img.addEventListener("click", () => replaceAssetsDownload(asset, type));
+
+    // Author name, profile picture, steam profile hyperlinked.
+    const name = document.createElement("p");
+    name.textContent = asset.author.name;
+    const pfp = document.createElement("img");
+    pfp.src = asset.author.avatarUrl;
+    
+    const steamProfileUrl = document.createElement("a");
+    steamProfileUrl.href = asset.author.steamProfileUrl;
+    steamProfileUrl.appendChild(name);
+
+
+    const assetDiv = document.createElement("div");
+
+    assetDiv.appendChild(img);
+    assetDiv.appendChild(steamProfileUrl);
+    assetDiv.appendChild(pfp);
+    assetsGrid.appendChild(assetDiv);
   });
 }
 
@@ -141,8 +163,9 @@ export function renderAssetsDownload(downloadData: DownloadAssets) {
 }
 
 function replaceAssetsDownload(asset: Asset, type: AssetType) {
-  const replaceAsset = document.getElementById(`${type}-download`) as HTMLImageElement;
-  console.log(asset);
+  const replaceAsset = document.getElementById(
+    `${type}-download`
+  ) as HTMLImageElement;
   if (replaceAsset == null) return;
   replaceAsset.src = asset.fullImageUrl;
 }
