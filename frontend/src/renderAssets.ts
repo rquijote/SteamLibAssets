@@ -35,17 +35,28 @@ function renderImages(fetchData: PaginatedAssets, type: AssetType) {
     name.textContent = asset.author.name;
     const pfp = document.createElement("img");
     pfp.src = asset.author.avatarUrl;
-    
+    const widthHeight = document.createElement("p");
+    widthHeight.textContent = `${asset.width}x${asset.height}`;
+
     const steamProfileUrl = document.createElement("a");
     steamProfileUrl.href = asset.author.steamProfileUrl;
     steamProfileUrl.appendChild(name);
 
+    const namecardDiv = document.createElement("div");
+    namecardDiv.classList = "name-card";
+    const nameDimensionsDiv = document.createElement("div");
+    nameDimensionsDiv.classList = "name-dimensions";
+
+    namecardDiv.appendChild(pfp);
+    nameDimensionsDiv.appendChild(steamProfileUrl);
+    nameDimensionsDiv.appendChild(widthHeight);
+    namecardDiv.appendChild(nameDimensionsDiv);
 
     const assetDiv = document.createElement("div");
+    assetDiv.classList = "asset-card"
 
     assetDiv.appendChild(img);
-    assetDiv.appendChild(steamProfileUrl);
-    assetDiv.appendChild(pfp);
+    assetDiv.appendChild(namecardDiv);
     assetsGrid.appendChild(assetDiv);
   });
 }
@@ -147,8 +158,9 @@ export function renderAssetsDownload(downloadData: DownloadAssets) {
     const img = document.createElement("img");
     img.src = asset.fullImageUrl;
     img.alt = key;
-    img.width = 300;
-    img.height = 300;
+    img.width = asset.width / 3;
+    img.height = asset.height / 3;
+
     img.style.margin = "4px";
     img.classList = "downloadImg";
     img.id = `${key}-download`;

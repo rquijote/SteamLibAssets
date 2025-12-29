@@ -1,3 +1,13 @@
+body {
+  font-family: 'Roboto';
+}
+
+#main-container {
+  max-width: 1200px; /* Set the content in the center of the page to 1200px. */
+  margin-left: auto;
+  margin-right: auto;
+}
+
 #assets-container {
   background-color: lightskyblue;
 }
@@ -7,6 +17,7 @@
   display: grid;
   grid-template-columns: auto auto auto auto;
   justify-items: center;
+  gap: 20px;
 }
 
 /* Extra small devices (phones, 600px and down) */
@@ -42,4 +53,15 @@
   #assets-grid {
     grid-template-columns: auto auto auto auto;
   }
+}
+
+.name-card {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.name-dimensions p {
+  margin: 0px;
 }

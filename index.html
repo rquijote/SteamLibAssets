@@ -11,23 +11,27 @@
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     <script src="./frontend/dist/index.js" type="module" defer></script>
     <link rel="stylesheet" href="./frontend/styles/index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <h1>Steam Library Assets Downloader</h1>
-    <div>
-      <label>Enter App ID</label>
+    <div id="main-container">
+      <h1>Steam Library Assets Downloader</h1>
       <input
         type="text"
         id="appIdInput"
         name="appIdInput"
         autocomplete="off"
-        value="237930"
+        placeholder="Enter App ID"
       />
-      <button id="enterAppIdBtn">Enter</button>
+      <button id="searchAppIdBtn">Search</button>
       <button id="downloadBtn">Download</button>
       <div id="assets-container">
-        <div id="assets-download">
-        </div>
+        <div id="assets-download"></div>
         <div id="assets-btns">
           <button type="button" class="asset-btns" id="grids-btn">Grids</button>
           <button type="button" class="asset-btns" id="heroes-btn">

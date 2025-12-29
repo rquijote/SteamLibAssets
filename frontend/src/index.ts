@@ -12,7 +12,7 @@ console.log("js file loaded");
  *
  */
 
-const appIdButton = document.getElementById("enterAppIdBtn");
+const appIdButton = document.getElementById("searchAppIdBtn");
 const downloadBtn = document.getElementById("downloadBtn");
 const gridsBtn = document.getElementById("grids-btn");
 const heroesBtn = document.getElementById("heroes-btn");
@@ -24,7 +24,7 @@ const firstPage = 1;
 loadAssets("grid", firstPage);
 loadDefaultDownloadAssets();
 
-appIdButton!.addEventListener("click", enterAppIDButtonClick);
+appIdButton!.addEventListener("click", searchAppIDButtonClick);
 downloadBtn!.addEventListener("click", () => downloadAssets(appId));
 gridsBtn!.addEventListener("click", () => loadAssets("grid", firstPage));
 heroesBtn!.addEventListener("click", () => loadAssets("hero", firstPage));
@@ -57,7 +57,7 @@ export async function loadAssets(type: AssetType, pageNum: number) {
   Render.renderAssetsGrid(fetchData, type);
 }
 
-async function enterAppIDButtonClick() {
+async function searchAppIDButtonClick() {
   const appIdInputValue = (<HTMLInputElement>(
     document.getElementById("appIdInput")
   )).value;
