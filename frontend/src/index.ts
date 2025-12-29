@@ -1,4 +1,3 @@
-import downloadAssets from "./downloadAssets.js";
 import * as Fetch from "./fetchAssets.js";
 import * as Render from "./renderAssets.js";
 import type { AssetType, PaginatedAssets } from "./types/Asset.js";
@@ -13,7 +12,6 @@ console.log("js file loaded");
  */
 
 const appIdButton = document.getElementById("searchAppIdBtn");
-const downloadBtn = document.getElementById("downloadBtn");
 const gridsBtn = document.getElementById("grids-btn");
 const heroesBtn = document.getElementById("heroes-btn");
 const logosBtn = document.getElementById("logos-btn");
@@ -22,19 +20,12 @@ const iconsBtn = document.getElementById("icons-btn");
 let appId = 5262075 // Temp default id
 const firstPage = 1;
 loadAssets("grid", firstPage);
-loadDefaultDownloadAssets();
 
 appIdButton!.addEventListener("click", searchAppIDButtonClick);
-downloadBtn!.addEventListener("click", () => downloadAssets(appId));
 gridsBtn!.addEventListener("click", () => loadAssets("grid", firstPage));
 heroesBtn!.addEventListener("click", () => loadAssets("hero", firstPage));
 logosBtn!.addEventListener("click", () => loadAssets("logo", firstPage));
 iconsBtn!.addEventListener("click", () => loadAssets("icon", firstPage));
-
-export async function loadDefaultDownloadAssets() {
-  const allAssets = await Fetch.fetchAll(appId);
-  Render.renderAssetsDownload(allAssets);
-}
 
 export async function loadAssets(type: AssetType, pageNum: number) {
   let fetchData: PaginatedAssets;

@@ -1,10 +1,9 @@
 import type {
   PaginatedAssets,
   AssetType,
-  DownloadAssets,
-  Asset,
 } from "./types/Asset.js";
 import { loadAssets } from "./index.js";
+import downloadAsset from "./downloadAsset.js";
 
 /**
  *
@@ -27,8 +26,9 @@ function renderImages(fetchData: PaginatedAssets, type: AssetType) {
   fetchData.assets.forEach((asset) => {
     const img = document.createElement("img");
     img.src = asset.thumbnailImageUrl;
-
-    img.addEventListener("click", () => replaceAssetsDownload(asset, type));
+    img.addEventListener("click", async () => {
+      downloadAsset(asset.fullImageUrl, type);
+    })
 
     // Author name, profile picture, steam profile hyperlinked.
     const name = document.createElement("p");
@@ -142,42 +142,4 @@ function appendPaginationUl(paginationUl: HTMLUListElement, type: AssetType) {
 
     div.appendChild(clone);
   }
-}
-
-/**
- *
- * Render Assets Download
- *
- */
-
-export function renderAssetsDownload(downloadData: DownloadAssets) {
-  const assetsDownloadDiv = document.getElementById("assets-download");
-  assetsDownloadDiv!.replaceChildren(); // clear previous content
-
-  Object.entries(downloadData).forEach(([key, asset]) => {
-    const img = document.createElement("img");
-    img.src = asset.fullImageUrl;
-    img.alt = key;
-    img.width = asset.width / 3;
-    img.height = asset.height / 3;
-
-    img.style.margin = "4px";
-    img.classList = "downloadImg";
-    img.id = `${key}-download`;
-
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = true;
-
-    assetsDownloadDiv!.appendChild(img);
-    assetsDownloadDiv!.appendChild(checkbox);
-  });
-}
-
-function replaceAssetsDownload(asset: Asset, type: AssetType) {
-  const replaceAsset = document.getElementById(
-    `${type}-download`
-  ) as HTMLImageElement;
-  if (replaceAsset == null) return;
-  replaceAsset.src = asset.fullImageUrl;
 }
