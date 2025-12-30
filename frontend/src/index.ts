@@ -11,17 +11,20 @@ console.log("js file loaded");
  *
  */
 
-const appIdButton = document.getElementById("searchAppIdBtn");
 const gridsBtn = document.getElementById("grids-btn");
 const heroesBtn = document.getElementById("heroes-btn");
 const logosBtn = document.getElementById("logos-btn");
 const iconsBtn = document.getElementById("icons-btn");
+const searchForm = document.getElementById("searchForm")
 
 let appId = 5262075 // Temp default id
 const firstPage = 1;
 loadAssets("grid", firstPage);
 
-appIdButton!.addEventListener("click", searchAppIDButtonClick);
+searchForm!.addEventListener("submit", (e) => {
+  e.preventDefault();
+  searchAppID();
+})
 gridsBtn!.addEventListener("click", () => loadAssets("grid", firstPage));
 heroesBtn!.addEventListener("click", () => loadAssets("hero", firstPage));
 logosBtn!.addEventListener("click", () => loadAssets("logo", firstPage));
@@ -48,7 +51,7 @@ export async function loadAssets(type: AssetType, pageNum: number) {
   Render.renderAssetsGrid(fetchData, type);
 }
 
-async function searchAppIDButtonClick() {
+async function searchAppID() {
   const appIdInputValue = (<HTMLInputElement>(
     document.getElementById("appIdInput")
   )).value;
