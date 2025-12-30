@@ -48,6 +48,8 @@ export async function loadAssets(type: AssetType, pageNum: number) {
   }
   // Should have a loading icon here during this.
   console.log(fetchData);
+  let allAssets = await Fetch.fetchAll(appId);
+  Render.renderBGDiv(allAssets);
   Render.renderAssetsGrid(fetchData, type);
 }
 

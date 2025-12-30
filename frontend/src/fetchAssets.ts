@@ -1,4 +1,4 @@
-import type { DownloadAssets, PaginatedAssets } from "./types/Asset.js";
+import type { DownloadAssets, PaginatedAssets, Asset } from "./types/Asset.js";
 
 const API_BASE = "http://localhost:5062/api/assets"; // temp port for local host
 

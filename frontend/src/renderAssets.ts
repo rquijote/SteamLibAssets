@@ -1,9 +1,27 @@
 import type {
   PaginatedAssets,
   AssetType,
+  Asset,
+  DownloadAssets,
 } from "./types/Asset.js";
 import { loadAssets } from "./index.js";
 import downloadAsset from "./downloadAsset.js";
+
+/**
+ *
+ * Render BG Image
+ *
+ */
+
+export function renderBGDiv(allAssets: DownloadAssets) {
+  const bg = document.getElementById("bg-preview") as HTMLDivElement;
+  bg.style.backgroundImage = `url(${allAssets.hero.fullImageUrl})`;
+
+  const logo = document.createElement("img");
+  logo.src = allAssets.logo.thumbnailImageUrl;
+  logo.id = "bg-logo";
+  bg.appendChild(logo);
+}
 
 /**
  *
@@ -63,6 +81,7 @@ function renderImages(fetchData: PaginatedAssets, type: AssetType) {
 
 function renderPaginationBtns(fetchData: PaginatedAssets, type: AssetType) {
   const paginationUl = document.createElement("ul");
+  paginationUl.classList.add("pagination-wrapper");
   const pageNum = fetchData.page;
   const totalPages = fetchData.totalPages;
   const firstPage = 1;
@@ -106,6 +125,7 @@ function renderPaginationBtns(fetchData: PaginatedAssets, type: AssetType) {
 function createPageLi(page: number, currentPage: number) {
   const li = document.createElement("li");
   li.textContent = page.toString();
+  li.classList.add("pagination-btn");
 
   if (page === currentPage) {
     li.classList.add("active");
