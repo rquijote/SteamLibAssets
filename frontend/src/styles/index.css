@@ -60,11 +60,17 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
+}
+
+#bg-container {
+  width: 1200px; /* Set the content in the center of the page to 1200px. */
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: space-between;
   padding-left: 50px;
   padding-right: 50px;
   padding-top: 20px;
-  display: flex;
-  justify-content: space-between;
 }
 
 #bg-logo {
@@ -74,7 +80,7 @@ body {
   background-size: contain;
   height: 200px;
   width: auto;
-  max-width: 500px
+  max-width: 500px;
 }
 
 #search-div {
@@ -103,9 +109,9 @@ body {
 }
 
 #appIdInput:focus {
-  background-color: black;  
-  color: white;             
-  border-color: black;     
+  background-color: black;
+  color: white;
+  border-color: black;
   background-image: url("../images/white-search-icon.png");
 }
 

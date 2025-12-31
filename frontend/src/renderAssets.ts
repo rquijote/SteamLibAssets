@@ -14,8 +14,8 @@ import downloadAsset from "./downloadAsset.js";
  */
 
 export function renderBGDiv(allAssets: DownloadAssets) {
-  const bg = document.getElementById("bg-header") as HTMLDivElement;
-  bg.style.backgroundImage = `url(${allAssets.hero.fullImageUrl})`;
+  const bgHeader = document.getElementById("bg-header") as HTMLDivElement;
+  bgHeader.style.backgroundImage = `url(${allAssets.hero.fullImageUrl})`;
 
   let logo = document.getElementById("bg-logo") as HTMLImageElement;
 
@@ -25,7 +25,8 @@ export function renderBGDiv(allAssets: DownloadAssets) {
 
   logo.src = allAssets.logo.thumbnailImageUrl;
   logo.id = "bg-logo";
-  bg.appendChild(logo);
+  const bgContainer = document.getElementById("bg-container") as HTMLDivElement;
+  bgContainer.appendChild(logo);
 }
 
 /**
