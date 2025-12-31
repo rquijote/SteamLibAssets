@@ -15,16 +15,16 @@ const gridsBtn = document.getElementById("grids-btn");
 const heroesBtn = document.getElementById("heroes-btn");
 const logosBtn = document.getElementById("logos-btn");
 const iconsBtn = document.getElementById("icons-btn");
-const searchForm = document.getElementById("searchForm")
+const searchForm = document.getElementById("searchForm");
 
-let appId = 5262075 // Temp default id
+let appId = 5262075; // Temp default id
 const firstPage = 1;
 loadAssets("grid", firstPage);
 
 searchForm!.addEventListener("submit", (e) => {
   e.preventDefault();
   searchAppID();
-})
+});
 gridsBtn!.addEventListener("click", () => loadAssets("grid", firstPage));
 heroesBtn!.addEventListener("click", () => loadAssets("hero", firstPage));
 logosBtn!.addEventListener("click", () => loadAssets("logo", firstPage));
@@ -33,18 +33,18 @@ iconsBtn!.addEventListener("click", () => loadAssets("icon", firstPage));
 export async function loadAssets(type: AssetType, pageNum: number) {
   let fetchData: PaginatedAssets;
   switch (type) {
-    case "grid": 
-    fetchData = await Fetch.fetchGrids(appId, pageNum);
-    break
-     case "hero": 
-    fetchData = await Fetch.fetchHeroes(appId, pageNum);
-    break
-     case "logo": 
-    fetchData = await Fetch.fetchLogos(appId, pageNum);
-    break
-     case "icon": 
-    fetchData = await Fetch.fetchIcons(appId, firstPage);
-    break
+    case "grid":
+      fetchData = await Fetch.fetchGrids(appId, pageNum);
+      break;
+    case "hero":
+      fetchData = await Fetch.fetchHeroes(appId, pageNum);
+      break;
+    case "logo":
+      fetchData = await Fetch.fetchLogos(appId, pageNum);
+      break;
+    case "icon":
+      fetchData = await Fetch.fetchIcons(appId, firstPage);
+      break;
   }
   // Should have a loading icon here during this.
   console.log(fetchData);
@@ -54,10 +54,12 @@ export async function loadAssets(type: AssetType, pageNum: number) {
 }
 
 async function searchAppID() {
-  const appIdInputValue = (<HTMLInputElement>(
-    document.getElementById("appIdInput")
-  )).value;
-  if (appIdInputValue == null) return;
+  const appIdInput = <HTMLInputElement>document.getElementById("appIdInput");
+  let appIdInputValue = appIdInput.value;
+  if (!appIdInputValue) return;
+
   appId = Number(appIdInputValue);
   loadAssets("grid", firstPage);
+
+  appIdInput.value = "";
 }
