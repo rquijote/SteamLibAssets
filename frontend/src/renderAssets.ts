@@ -14,10 +14,15 @@ import downloadAsset from "./downloadAsset.js";
  */
 
 export function renderBGDiv(allAssets: DownloadAssets) {
-  const bg = document.getElementById("bg-preview") as HTMLDivElement;
+  const bg = document.getElementById("bg-header") as HTMLDivElement;
   bg.style.backgroundImage = `url(${allAssets.hero.fullImageUrl})`;
 
-  const logo = document.createElement("img");
+  let logo = document.getElementById("bg-logo") as HTMLImageElement;
+
+  if (logo == null) {
+    logo = document.createElement("img");
+  }
+
   logo.src = allAssets.logo.thumbnailImageUrl;
   logo.id = "bg-logo";
   bg.appendChild(logo);

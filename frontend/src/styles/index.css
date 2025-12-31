@@ -1,13 +1,20 @@
 /*
 * 
-* Colours 
+* CSS Vars 
 *
 */
 
 :root {
-  --secondary-bg-color: #1F1F1F;
+  --secondary-bg-color: #1f1f1f;
   --global-border-radius: 15px;
 }
+
+/* 
+  --sm-width: 600px;
+  --md-width: 768px;
+  --lg-width: 992px;
+  --xl-width: 1200px;
+*/
 
 /*
 * 
@@ -30,11 +37,6 @@ body {
   gap: 10px;
 }
 
-#main-container h1 {
-  color: white;
-  margin: 0px;
-}
-
 #header-card {
   background-color: var(--secondary-bg-color);
   border-radius: var(--global-border-radius);
@@ -43,32 +45,36 @@ body {
 
 /*
 * 
-* BG Preview (Includes: Search Bar)
+* BG Header (Includes: Search Bar)
 *
 */
 
-#bg-preview {
-  background-color: green;
-  height: 300px;
+#main-container h1 {
+  color: white;
+  margin: 0px;
+}
+
+#bg-header {
+  height: 500px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 
 #bg-logo {
-  height: 200px;
-  width: 300px;
   position: absolute;
-  bottom: 0;
-  left: 0;
-}
-
-@media only screen and (max-width: 768px) {
-  #bg-logo {
-    width: 200px;
-    height: 150px;
-  }
+  bottom: 20px;
+  left: 50;
+  background-size: contain;
+  height: 200px;
+  width: auto;
+  max-width: 500px
 }
 
 #search-div {
@@ -79,6 +85,7 @@ body {
   border: 1px solid #d0d7de;
   border-radius: 10px;
   padding: 10px 14px;
+  background-color: rgba(255, 255, 255, 0.6);
   outline: none;
   box-shadow: none;
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
@@ -87,6 +94,11 @@ body {
   background-size: 20px 20px;
   background-position: 8px center;
   padding-left: 36px;
+  width: 300px;
+}
+
+#appIdInput::placeholder {
+  color: #949695;
 }
 
 #appIdInput:focus {
@@ -102,7 +114,7 @@ body {
 
 #assets-container {
   background-color: var(--secondary-bg-color);
-  border-radius: var(--global-border-radius)
+  border-radius: var(--global-border-radius);
 }
 
 /*
