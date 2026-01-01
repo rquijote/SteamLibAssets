@@ -7,7 +7,7 @@ console.log("js file loaded");
 
 /**
  *
- * Event Listeners
+ * Initializations 
  *
  */
 
@@ -21,13 +21,69 @@ let selectedAppId = defaultAppId;
 const firstPage = 1;
 loadAssets("grid", firstPage, selectedAppId); // Loads the initial page
 
-const searchInput = document.getElementById("appIdInput") as HTMLInputElement;
+/**
+ *
+ * Search Bar
+ *
+ */
+
+const searchInput = document.getElementById("searchInput") as HTMLInputElement;
+const searchResults = document.getElementById(
+  "search-results"
+) as HTMLDivElement;
+
 if (searchInput)
   setupLiveSearch(searchInput, (game) => {
     selectedAppId = game.id;
     searchInput.value = game.name;
     loadAssets("grid", firstPage, selectedAppId);
   });
+
+if (searchInput && searchResults) {
+  searchInput.addEventListener("focus", () => {
+    searchResults.classList.add("visible");
+    searchInput.classList.add("active");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (e.target !== searchInput && !searchResults.contains(e.target as Node)) {
+      searchResults.classList.remove("visible");
+      searchInput.classList.remove("active");
+    }
+  });
+}
+
+function setupLiveSearch(
+  input: HTMLInputElement,
+  onSelect: (game: { id: number; name: string }) => void
+) {
+  let debounceTimer: number;
+
+  input.addEventListener("input", () => {
+    clearTimeout(debounceTimer);
+
+    debounceTimer = window.setTimeout(async () => {
+      const inputValue = input.value.trim();
+      if (!inputValue) {
+        Render.renderSearchResults([], onSelect);
+        return;
+      }
+
+      try {
+        const listData = await Fetch.searchGames(inputValue);
+        Render.renderSearchResults(listData, onSelect);
+      } catch (err) {
+        console.error(err);
+      }
+    }, 300);
+  });
+}
+
+/**
+ *
+ * Load Assets Event Listener 
+ *
+ */
 
 gridsBtn!.addEventListener("click", () =>
   loadAssets("grid", firstPage, selectedAppId)
@@ -67,30 +123,4 @@ export async function loadAssets(
   Render.renderActiveAssetsBtn(type);
   Render.renderBGDiv(allAssets);
   Render.renderAssetsGrid(fetchData, type, appId);
-}
-
-function setupLiveSearch(
-  input: HTMLInputElement,
-  onSelect: (game: { id: number; name: string }) => void
-) {
-  let debounceTimer: number;
-
-  input.addEventListener("input", () => {
-    clearTimeout(debounceTimer);
-
-    debounceTimer = window.setTimeout(async () => {
-      const inputValue = input.value.trim();
-      if (!inputValue) {
-        Render.renderSearchResults([], onSelect);
-        return;
-      }
-
-      try {
-        const listData = await Fetch.searchGames(inputValue);
-        Render.renderSearchResults(listData, onSelect);
-      } catch (err) {
-        console.error(err);
-      }
-    }, 300);
-  });
 }
