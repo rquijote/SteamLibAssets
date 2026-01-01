@@ -15,7 +15,16 @@ import downloadAsset from "./downloadAsset.js";
 
 export function renderBGDiv(allAssets: DownloadAssets) {
   const bgHeader = document.getElementById("bg-header") as HTMLDivElement;
-  bgHeader.style.backgroundImage = `url(${allAssets.hero.fullImageUrl})`;
+  bgHeader.style.backgroundImage = `
+  linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 75%,
+    rgba(0,0,0,0.35) 88%,
+    rgba(0,0,0,0.7) 96%,
+    rgba(0,0,0,1) 100%
+  ),
+  url("${allAssets.hero.fullImageUrl}")
+`;
 
   let logo = document.getElementById("bg-logo") as HTMLImageElement;
 
@@ -31,6 +40,26 @@ export function renderBGDiv(allAssets: DownloadAssets) {
 
 /**
  *
+ * Render Assets Btn Active
+ *
+ */
+
+  export function renderActiveAssetsBtn(type: AssetType) {
+    const allAssetBtns = document.getElementsByClassName("asset-btns");
+    for (const btn of allAssetBtns) {
+      btn.classList.remove("active");
+    }
+    if (type == "hero") {
+      const button = document.getElementById(`${type}es-btn`);
+      button?.classList.add("active");
+      return;
+    }
+    const button = document.getElementById(`${type}s-btn`);
+    button?.classList.add("active");
+  }
+
+/**
+ *
  * Render Assets Grid
  *
  */
@@ -42,45 +71,65 @@ export function renderAssetsGrid(fetchData: PaginatedAssets, type: AssetType) {
 
 function renderImages(fetchData: PaginatedAssets, type: AssetType) {
   const assetsGrid = document.getElementById("assets-grid");
-  if (assetsGrid == null) {
+  if (!assetsGrid) {
     console.error("No assets-grid found.");
     return;
   }
+
+  // Clear previous assets
   assetsGrid.replaceChildren();
+
   fetchData.assets.forEach((asset) => {
+    // Main asset image
     const img = document.createElement("img");
     img.src = asset.thumbnailImageUrl;
-    img.addEventListener("click", async () => {
-      downloadAsset(asset.fullImageUrl, type);
-    })
+    img.alt = asset.author.name || "Asset";
+    img.addEventListener("click", () => downloadAsset(asset.fullImageUrl, type));
 
-    // Author name, profile picture, steam profile hyperlinked.
-    const name = document.createElement("p");
-    name.textContent = asset.author.name;
+    // Author profile
+    const steamProfileUrl = asset.author.steamProfileUrl;
+
+    // Author name
+    const nameLink = document.createElement("a");
+    nameLink.href = steamProfileUrl;
+    nameLink.textContent = asset.author.name;
+    nameLink.target = "_blank";
+    nameLink.rel = "noopener noreferrer";
+
+    // Profile picture
+    const pfpLink = document.createElement("a");
+    pfpLink.href = steamProfileUrl;
+    pfpLink.target = "_blank";
+    pfpLink.rel = "noopener noreferrer";
+
     const pfp = document.createElement("img");
     pfp.src = asset.author.avatarUrl;
+    pfp.alt = `${asset.author.name}'s avatar`;
+    pfp.classList.add("pfp"); 
+
+    pfpLink.appendChild(pfp);
+
+    // Name & dimensions container
     const widthHeight = document.createElement("p");
     widthHeight.textContent = `${asset.width}x${asset.height}`;
 
-    const steamProfileUrl = document.createElement("a");
-    steamProfileUrl.href = asset.author.steamProfileUrl;
-    steamProfileUrl.appendChild(name);
-
-    const namecardDiv = document.createElement("div");
-    namecardDiv.classList = "name-card";
     const nameDimensionsDiv = document.createElement("div");
-    nameDimensionsDiv.classList = "name-dimensions";
-
-    namecardDiv.appendChild(pfp);
-    nameDimensionsDiv.appendChild(steamProfileUrl);
+    nameDimensionsDiv.classList.add("name-dimensions");
+    nameDimensionsDiv.appendChild(nameLink);
     nameDimensionsDiv.appendChild(widthHeight);
+
+    // Name card container
+    const namecardDiv = document.createElement("div");
+    namecardDiv.classList.add("name-card");
+    namecardDiv.appendChild(pfpLink);
     namecardDiv.appendChild(nameDimensionsDiv);
 
+    // Asset card container
     const assetDiv = document.createElement("div");
-    assetDiv.classList = "asset-card"
-
+    assetDiv.classList.add("asset-card");
     assetDiv.appendChild(img);
     assetDiv.appendChild(namecardDiv);
+
     assetsGrid.appendChild(assetDiv);
   });
 }

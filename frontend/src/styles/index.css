@@ -5,8 +5,12 @@
 */
 
 :root {
+  --primary-bg-color: black;
   --secondary-bg-color: #1f1f1f;
-  --global-border-radius: 15px;
+  --global-border-radius: 5px;
+  --btn-text-color: #0F0F0F;
+  --primary-text-color: #FEFEFE;
+  --secondary-text-color: #adadad;
 }
 
 /* 
@@ -24,7 +28,7 @@
 
 body {
   font-family: "Roboto";
-  background-color: black;
+  background-color: var(--primary-bg-color);
   margin: 0px;
 }
 
@@ -49,14 +53,15 @@ body {
 }
 
 #bg-header {
+  /* Holds the img background url */
   height: 500px;
+  width: 100%;
+  position: relative;
+  padding-top: 10px;
+
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  position: relative;
-  padding-top: 10px;
-  box-shadow: inset 0 0 0 2000px rgba(20, 20, 20, 0.3);
-  width: 100%;
 }
 
 #bg-container {
@@ -128,7 +133,6 @@ body {
 */
 
 #assets-container {
-  background-color: var(--secondary-bg-color);
   border-radius: var(--global-border-radius);
 }
 
@@ -139,28 +143,22 @@ body {
 */
 
 .asset-btns {
-  box-shadow: inset 0px 1px 0px 0px #ffffff;
-  background: linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
-  background-color: #ffffff;
   border-radius: 6px;
-  border: 1px solid #dcdcdc;
-  display: inline-block;
   cursor: pointer;
-  color: #666666;
+  color: var(btn-text-color);
   font-weight: bold;
+  background-color: white;
+  border: none;
   padding: 6px 24px;
-  text-decoration: none;
-  text-shadow: 0px 1px 0px #ffffff;
 }
 
 .asset-btns:hover {
-  background: linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
-  background-color: #f6f6f6;
+  cursor: pointer;
+  background-color: lightgray;
 }
 
-.asset-btns:active {
-  position: relative;
-  top: 1px;
+.asset-btns.active {
+  background-color: #b0b0b0;
 }
 
 /*
@@ -180,25 +178,19 @@ body {
   display: block; /* let links fill the list item */
   padding: 8px 12px;
   text-decoration: none;
-  border: 1px solid #dcdcdc;
-  color: black;
   margin: 0 4px;
   border-radius: 6px;
-  box-shadow: inset 0px 1px 0px 0px #ffffff;
-  background: linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
-  background-color: #ffffff;
-  color: #666666;
+  background-color: white;
+  color: var(btn-text-color);
 }
 
 .pagination-btn:hover {
   cursor: pointer;
-  background: linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
-  background-color: #f6f6f6;
+  background-color: lightgray;
 }
 
-.pagination-btn:active {
-  position: relative;
-  top: 1px;
+.pagination-btn.active {
+  background-color: #b0b0b0;
 }
 
 /*
@@ -255,10 +247,6 @@ body {
 *
 */
 
-.asset-card {
-  cursor: pointer;
-}
-
 .name-card {
   display: flex;
   flex-direction: row;
@@ -266,6 +254,17 @@ body {
   align-items: center;
 }
 
+.name-dimensions a {
+  text-decoration: none;
+  color: var(--primary-text-color);
+}
+
 .name-dimensions p {
   margin: 0px;
+  color: var(--secondary-text-color);
+}
+
+.asset-card img {
+  cursor: pointer;
+  border-radius: var(--global-border-radius);
 }
