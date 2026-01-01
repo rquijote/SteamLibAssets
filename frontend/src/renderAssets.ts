@@ -1,7 +1,7 @@
 import type {
   PaginatedAssets,
   AssetType,
-  Asset,
+  GameAsset,
   DownloadAssets,
 } from "./types/Asset.js";
 import { loadAssets } from "./index.js";
@@ -44,19 +44,19 @@ export function renderBGDiv(allAssets: DownloadAssets) {
  *
  */
 
-  export function renderActiveAssetsBtn(type: AssetType) {
-    const allAssetBtns = document.getElementsByClassName("asset-btns");
-    for (const btn of allAssetBtns) {
-      btn.classList.remove("active");
-    }
-    if (type == "hero") {
-      const button = document.getElementById(`${type}es-btn`);
-      button?.classList.add("active");
-      return;
-    }
-    const button = document.getElementById(`${type}s-btn`);
-    button?.classList.add("active");
+export function renderActiveAssetsBtn(type: AssetType) {
+  const allAssetBtns = document.getElementsByClassName("asset-btns");
+  for (const btn of allAssetBtns) {
+    btn.classList.remove("active");
   }
+  if (type == "hero") {
+    const button = document.getElementById(`${type}es-btn`);
+    button?.classList.add("active");
+    return;
+  }
+  const button = document.getElementById(`${type}s-btn`);
+  button?.classList.add("active");
+}
 
 /**
  *
@@ -84,7 +84,9 @@ function renderImages(fetchData: PaginatedAssets, type: AssetType) {
     const img = document.createElement("img");
     img.src = asset.thumbnailImageUrl;
     img.alt = asset.author.name || "Asset";
-    img.addEventListener("click", () => downloadAsset(asset.fullImageUrl, type));
+    img.addEventListener("click", () =>
+      downloadAsset(asset.fullImageUrl, type)
+    );
 
     // Author profile
     const steamProfileUrl = asset.author.steamProfileUrl;
@@ -105,7 +107,7 @@ function renderImages(fetchData: PaginatedAssets, type: AssetType) {
     const pfp = document.createElement("img");
     pfp.src = asset.author.avatarUrl;
     pfp.alt = `${asset.author.name}'s avatar`;
-    pfp.classList.add("pfp"); 
+    pfp.classList.add("pfp");
 
     pfpLink.appendChild(pfp);
 
@@ -217,4 +219,33 @@ function appendPaginationUl(paginationUl: HTMLUListElement, type: AssetType) {
 
     div.appendChild(clone);
   }
+}
+
+/**
+ *
+ * Render Search Results
+ *
+ */
+
+export function renderSearchResults(results: GameAsset[]) {
+  const container = document.getElementById("search-results");
+  if (!container) return;
+
+  container.innerHTML = ""; // Clear previous results
+
+  results.forEach((game) => {
+    const item = document.createElement("div");
+    item.classList.add("search-result-item");
+    item.textContent = game.name;
+
+    // Below will select the game
+    item.addEventListener("click", () => {
+      console.log("Selected game:", game);
+      const input = document.getElementById("appIdInput") as HTMLInputElement;
+      input.value = game.name;
+      container.innerHTML = ""; 
+    });
+
+    container.appendChild(item);
+  });
 }

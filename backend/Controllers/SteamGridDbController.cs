@@ -125,6 +125,23 @@ namespace SteamLibAssets.Controllers
                 return BadRequest("Failed to fetch image.");
             }
         }
+
+        [HttpGet("search/{searchTerm}")]
+        public async Task<IActionResult> Search(string searchTerm)
+        {
+            var searchResults = await _sgdbService.SearchGamesAsync(searchTerm);
+
+            // Returns only the steam grid id and name
+            var simplifiedResults = searchResults
+                .Select(game => new
+                {
+                    game.Id,
+                    game.Name
+                })
+                .ToList();
+
+            return Ok(simplifiedResults);
+        }
     }
 }
 

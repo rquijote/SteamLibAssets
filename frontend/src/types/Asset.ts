@@ -26,3 +26,8 @@ export type DownloadAssets = {
   logo: Asset;
   icon: Asset;
 };
+
+export type GameAsset = {
+  id: number;
+  name: string;
+}

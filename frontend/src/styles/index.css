@@ -54,6 +54,27 @@ body {
   margin: 0px;
 }
 
+#search-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+#search-results {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.search-result-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.search-result-item:hover {
+  background-color: #f0f0f0;
+}
+
 #bg-header {
   /* Holds the img background url */
   height: 600px;

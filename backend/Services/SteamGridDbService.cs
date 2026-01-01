@@ -20,5 +20,6 @@ namespace SteamLibAssets.Services
         public Task<SteamGridDbHero[]> GetHeroesAsync(int appId) => _client.GetHeroesByGameIdAsync(appId);
         public Task<SteamGridDbLogo[]> GetLogosAsync(int appId) => _client.GetLogosByGameIdAsync(appId);
         public Task<SteamGridDbIcon[]> GetIconsAsync(int appId) => _client.GetIconsByGameIdAsync(appId);
+        public Task<SteamGridDbGame[]> SearchGamesAsync(string searchTerm) => _client.SearchForGamesAsync(searchTerm);
     }
 }

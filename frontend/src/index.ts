@@ -1,6 +1,6 @@
 import * as Fetch from "./fetchAssets.js";
 import * as Render from "./renderAssets.js";
-import type { AssetType, PaginatedAssets } from "./types/Asset.js";
+import type { AssetType, GameAsset, PaginatedAssets } from "./types/Asset.js";
 
 //Shift f1 -> Run Build Task to run TS watch
 console.log("js file loaded");
@@ -15,16 +15,15 @@ const gridsBtn = document.getElementById("grids-btn");
 const heroesBtn = document.getElementById("heroes-btn");
 const logosBtn = document.getElementById("logos-btn");
 const iconsBtn = document.getElementById("icons-btn");
-const searchForm = document.getElementById("searchForm");
 
 let appId = 5262075; // Temp default id
 const firstPage = 1;
-loadAssets("grid", firstPage);
+loadAssets("grid", firstPage); // Loads the initial page
 
-searchForm!.addEventListener("submit", (e) => {
-  e.preventDefault();
-  searchAppID();
-});
+let debounceTimer: number; // Used to delay search to avoid overloading API.
+const searchInput = document.getElementById("appIdInput") as HTMLInputElement;
+if (searchInput) setupLiveSearch(searchInput);
+
 gridsBtn!.addEventListener("click", () => loadAssets("grid", firstPage));
 heroesBtn!.addEventListener("click", () => loadAssets("hero", firstPage));
 logosBtn!.addEventListener("click", () => loadAssets("logo", firstPage));
@@ -53,13 +52,23 @@ export async function loadAssets(type: AssetType, pageNum: number) {
   Render.renderAssetsGrid(fetchData, type);
 }
 
-async function searchAppID() {
-  const appIdInput = <HTMLInputElement>document.getElementById("appIdInput");
-  let appIdInputValue = appIdInput.value;
-  if (!appIdInputValue) return;
+async function setupLiveSearch(input: HTMLInputElement) {
+  input.addEventListener("input", () => {
+    clearTimeout(debounceTimer);
 
-  appId = Number(appIdInputValue);
-  loadAssets("grid", firstPage);
+    debounceTimer = window.setTimeout(async () => {
+      const inputValue = input.value.trim();
+      if (!inputValue) {
+        Render.renderSearchResults([]); // clear results if input empty
+        return;
+      }
 
-  appIdInput.value = "";
+      try {
+        const listData = await Fetch.searchGames(inputValue);
+        Render.renderSearchResults(listData);
+      } catch (err) {
+        console.error(err);
+      }
+    }, 300);
+  });
 }
