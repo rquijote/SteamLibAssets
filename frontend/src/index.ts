@@ -16,20 +16,37 @@ const heroesBtn = document.getElementById("heroes-btn");
 const logosBtn = document.getElementById("logos-btn");
 const iconsBtn = document.getElementById("icons-btn");
 
-let appId = 5262075; // Temp default id
+const defaultAppId = 5262075; // Temp default id
+let selectedAppId = defaultAppId;
 const firstPage = 1;
-loadAssets("grid", firstPage); // Loads the initial page
+loadAssets("grid", firstPage, selectedAppId); // Loads the initial page
 
-let debounceTimer: number; // Used to delay search to avoid overloading API.
 const searchInput = document.getElementById("appIdInput") as HTMLInputElement;
-if (searchInput) setupLiveSearch(searchInput);
+if (searchInput)
+  setupLiveSearch(searchInput, (game) => {
+    selectedAppId = game.id;
+    searchInput.value = game.name;
+    loadAssets("grid", firstPage, selectedAppId);
+  });
 
-gridsBtn!.addEventListener("click", () => loadAssets("grid", firstPage));
-heroesBtn!.addEventListener("click", () => loadAssets("hero", firstPage));
-logosBtn!.addEventListener("click", () => loadAssets("logo", firstPage));
-iconsBtn!.addEventListener("click", () => loadAssets("icon", firstPage));
+gridsBtn!.addEventListener("click", () =>
+  loadAssets("grid", firstPage, selectedAppId)
+);
+heroesBtn!.addEventListener("click", () =>
+  loadAssets("hero", firstPage, selectedAppId)
+);
+logosBtn!.addEventListener("click", () =>
+  loadAssets("logo", firstPage, selectedAppId)
+);
+iconsBtn!.addEventListener("click", () =>
+  loadAssets("icon", firstPage, selectedAppId)
+);
 
-export async function loadAssets(type: AssetType, pageNum: number) {
+export async function loadAssets(
+  type: AssetType,
+  pageNum: number,
+  appId: number
+) {
   let fetchData: PaginatedAssets;
   switch (type) {
     case "grid":
@@ -49,23 +66,28 @@ export async function loadAssets(type: AssetType, pageNum: number) {
   let allAssets = await Fetch.fetchAll(appId);
   Render.renderActiveAssetsBtn(type);
   Render.renderBGDiv(allAssets);
-  Render.renderAssetsGrid(fetchData, type);
+  Render.renderAssetsGrid(fetchData, type, appId);
 }
 
-async function setupLiveSearch(input: HTMLInputElement) {
+function setupLiveSearch(
+  input: HTMLInputElement,
+  onSelect: (game: { id: number; name: string }) => void
+) {
+  let debounceTimer: number;
+
   input.addEventListener("input", () => {
     clearTimeout(debounceTimer);
 
     debounceTimer = window.setTimeout(async () => {
       const inputValue = input.value.trim();
       if (!inputValue) {
-        Render.renderSearchResults([]); // clear results if input empty
+        Render.renderSearchResults([], onSelect);
         return;
       }
 
       try {
         const listData = await Fetch.searchGames(inputValue);
-        Render.renderSearchResults(listData);
+        Render.renderSearchResults(listData, onSelect);
       } catch (err) {
         console.error(err);
       }

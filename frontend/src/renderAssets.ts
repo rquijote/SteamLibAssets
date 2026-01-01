@@ -64,9 +64,9 @@ export function renderActiveAssetsBtn(type: AssetType) {
  *
  */
 
-export function renderAssetsGrid(fetchData: PaginatedAssets, type: AssetType) {
+export function renderAssetsGrid(fetchData: PaginatedAssets, type: AssetType, appId: number) {
   renderImages(fetchData, type);
-  renderPaginationBtns(fetchData, type);
+  renderPaginationBtns(fetchData, type, appId);
 }
 
 function renderImages(fetchData: PaginatedAssets, type: AssetType) {
@@ -136,7 +136,7 @@ function renderImages(fetchData: PaginatedAssets, type: AssetType) {
   });
 }
 
-function renderPaginationBtns(fetchData: PaginatedAssets, type: AssetType) {
+function renderPaginationBtns(fetchData: PaginatedAssets, type: AssetType, appId: number) {
   const paginationUl = document.createElement("ul");
   paginationUl.classList.add("pagination-wrapper");
   const pageNum = fetchData.page;
@@ -151,7 +151,7 @@ function renderPaginationBtns(fetchData: PaginatedAssets, type: AssetType) {
     for (let p = 1; p <= totalPages; p++) {
       paginationUl.appendChild(createPageLi(p, pageNum));
     }
-    appendPaginationUl(paginationUl, type);
+    appendPaginationUl(paginationUl, type, appId);
     return;
   }
 
@@ -176,7 +176,7 @@ function renderPaginationBtns(fetchData: PaginatedAssets, type: AssetType) {
   if (totalPages > firstPage)
     paginationUl.appendChild(createPageLi(totalPages, pageNum));
 
-  appendPaginationUl(paginationUl, type);
+  appendPaginationUl(paginationUl, type, appId);
 }
 
 function createPageLi(page: number, currentPage: number) {
@@ -198,7 +198,7 @@ function createEllipsisLi() {
   return li;
 }
 
-function appendPaginationUl(paginationUl: HTMLUListElement, type: AssetType) {
+function appendPaginationUl(paginationUl: HTMLUListElement, type: AssetType, appId: number) {
   const paginationDivs = document.getElementsByClassName("pagination-btns");
 
   for (let i = 0; i < paginationDivs.length; i++) {
@@ -214,7 +214,7 @@ function appendPaginationUl(paginationUl: HTMLUListElement, type: AssetType) {
       }
 
       const page = Number(li.textContent);
-      loadAssets(type, page);
+      loadAssets(type, page, appId);
     });
 
     div.appendChild(clone);
@@ -227,25 +227,26 @@ function appendPaginationUl(paginationUl: HTMLUListElement, type: AssetType) {
  *
  */
 
-export function renderSearchResults(results: GameAsset[]) {
+export function renderSearchResults(
+  results: { id: number; name: string }[],
+  onSelect: (game: { id: number; name: string }) => void
+) {
   const container = document.getElementById("search-results");
   if (!container) return;
 
-  container.innerHTML = ""; // Clear previous results
+  container.innerHTML = "";
 
   results.forEach((game) => {
     const item = document.createElement("div");
     item.classList.add("search-result-item");
     item.textContent = game.name;
 
-    // Below will select the game
     item.addEventListener("click", () => {
-      console.log("Selected game:", game);
-      const input = document.getElementById("appIdInput") as HTMLInputElement;
-      input.value = game.name;
-      container.innerHTML = ""; 
+      onSelect(game);
+      container.innerHTML = "";
     });
 
     container.appendChild(item);
   });
 }
+
