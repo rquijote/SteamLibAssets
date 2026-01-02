@@ -1,11 +1,14 @@
-const spinner = document.querySelector(".spinner") as HTMLDivElement;
+const spinnerWrapper = document.getElementById("spinner-wrapper") as HTMLDivElement;
+const assetsGrid = document.getElementById("assets-grid") as HTMLDivElement;
 
 export function showSpinner() {
-  spinner.style.display = "block";
+  spinnerWrapper.style.display = "flex";
+  assetsGrid.style.display = "none";
 }
 
 export function hideSpinner() {
-  spinner.style.display = "none";
+  spinnerWrapper.style.display = "none";
+  assetsGrid.style.display = "grid";
 }
 
 export function createSpinner(assetCard: HTMLElement): HTMLElement {
