@@ -15,16 +15,18 @@ import downloadAsset from "./downloadAsset.js";
 
 export function renderBGDiv(allAssets: DownloadAssets) {
   const bgHeader = document.getElementById("bg-header") as HTMLDivElement;
-  bgHeader.style.backgroundImage = `
-  linear-gradient(
-    to bottom,
-    rgba(0,0,0,0) 75%,
-    rgba(0,0,0,0.35) 88%,
-    rgba(0,0,0,0.7) 96%,
-    rgba(0,0,0,1) 100%
-  ),
-  url("${allAssets.hero.fullImageUrl}")
-`;
+
+  bgHeader.style.background = `
+    linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 25%),
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,0) 75%,
+      rgba(0,0,0,0.35) 88%,
+      rgba(0,0,0,0.7) 96%,
+      rgba(0,0,0,1) 100%
+    ),
+    url("${allAssets.hero.fullImageUrl}") center/cover no-repeat
+  `;
 
   let logo = document.getElementById("bg-logo") as HTMLImageElement;
 
@@ -64,7 +66,11 @@ export function renderActiveAssetsBtn(type: AssetType) {
  *
  */
 
-export function renderAssetsGrid(fetchData: PaginatedAssets, type: AssetType, appId: number) {
+export function renderAssetsGrid(
+  fetchData: PaginatedAssets,
+  type: AssetType,
+  appId: number
+) {
   renderImages(fetchData, type);
   renderPaginationBtns(fetchData, type, appId);
 }
@@ -136,7 +142,11 @@ function renderImages(fetchData: PaginatedAssets, type: AssetType) {
   });
 }
 
-function renderPaginationBtns(fetchData: PaginatedAssets, type: AssetType, appId: number) {
+function renderPaginationBtns(
+  fetchData: PaginatedAssets,
+  type: AssetType,
+  appId: number
+) {
   const paginationUl = document.createElement("ul");
   paginationUl.classList.add("pagination-wrapper");
   const pageNum = fetchData.page;
@@ -198,7 +208,11 @@ function createEllipsisLi() {
   return li;
 }
 
-function appendPaginationUl(paginationUl: HTMLUListElement, type: AssetType, appId: number) {
+function appendPaginationUl(
+  paginationUl: HTMLUListElement,
+  type: AssetType,
+  appId: number
+) {
   const paginationDivs = document.getElementsByClassName("pagination-btns");
 
   for (let i = 0; i < paginationDivs.length; i++) {
@@ -249,4 +263,3 @@ export function renderSearchResults(
     container.appendChild(item);
   });
 }
-
