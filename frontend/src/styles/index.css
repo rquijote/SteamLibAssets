@@ -34,7 +34,7 @@ body {
 }
 
 #main-container {
-  max-width: 1200px; /* Set the content in the center of the page to 1200px. */
+  max-width: 1600px; /* Set the content in the center of the page to 1200px. */
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -259,10 +259,51 @@ body {
 
 #assets-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 300px); /* fixed width per item */
   justify-content: center;
   justify-items: center;
-  row-gap: 50px;
+  row-gap: 30px;
+  column-gap: 10px;
+  padding: 10px;
+}
+
+#assets-grid.grid {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+@media only screen and (max-width: 1000px) {
+  #assets-grid.grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #assets-grid.grid {
+    grid-template-columns: repeat(auto-fit, 200px);
+  }
+}
+
+#assets-grid.grid .asset-card {
+  width: 100%;
+}
+
+#assets-grid.hero {
+  grid-template-columns: repeat(auto-fit, 100%);
+}
+
+@media only screen and (min-width: 1200px) {
+  #assets-grid.hero {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+#assets-grid.hero .asset-card {
+  width: 100%;
+  height: auto;
+}
+
+#assets-grid.logo,
+#assets-grid.icon {
+  grid-template-columns: repeat(auto-fit, 300px);
 }
 
 /*
@@ -298,5 +339,18 @@ body {
 .asset-card img {
   cursor: pointer;
   border-radius: var(--global-border-radius);
-  width: 100%; /* Stops img from exceeding grid item width */
+  width: 100%;
+}
+
+.name-card a .pfp {
+  width: 64px;
+  height: 64px;
+}
+
+#assets-grid.logo .asset-card,
+#assets-grid.icon .asset-card {
+  background-color: rgba(87, 87, 87, 0.5);
+  border-radius: var(--global-border-radius);
+  padding: 30px;
+  justify-content: flex-end;
 }

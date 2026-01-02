@@ -82,6 +82,9 @@ function renderImages(fetchData: PaginatedAssets, type: AssetType) {
     return;
   }
 
+  // Update className to the current type.
+  assetsGrid.className = type;
+
   // Clear previous assets
   assetsGrid.replaceChildren();
 
