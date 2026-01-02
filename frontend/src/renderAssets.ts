@@ -75,6 +75,10 @@ export function renderAssetsGrid(
   renderPaginationBtns(fetchData, type, appId);
 }
 
+function initialisePaginationBtns() {
+  
+}
+
 function renderImages(fetchData: PaginatedAssets, type: AssetType) {
   const assetsGrid = document.getElementById("assets-grid");
   if (!assetsGrid) {

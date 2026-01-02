@@ -1,6 +1,7 @@
 import * as Fetch from "./fetchAssets.js";
 import * as Render from "./renderAssets.js";
-import type { AssetType, GameAsset, PaginatedAssets } from "./types/Asset.js";
+import type { AssetType, PaginatedAssets } from "./types/Asset.js";
+import * as Spinner from "./spinner.js";
 
 //Shift f1 -> Run Build Task to run TS watch
 console.log("js file loaded");
@@ -104,6 +105,7 @@ export async function loadAssets(
   appId: number
 ) {
   let fetchData: PaginatedAssets;
+  Spinner.showSpinner();
   switch (type) {
     case "grid":
       fetchData = await Fetch.fetchGrids(appId, pageNum);
@@ -123,4 +125,5 @@ export async function loadAssets(
   Render.renderActiveAssetsBtn(type);
   Render.renderBGDiv(allAssets);
   Render.renderAssetsGrid(fetchData, type, appId);
+  Spinner.hideSpinner();
 }
