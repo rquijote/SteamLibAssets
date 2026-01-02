@@ -1,11 +1,11 @@
 import type {
   PaginatedAssets,
   AssetType,
-  GameAsset,
   DownloadAssets,
 } from "./types/Asset.js";
 import { loadAssets } from "./index.js";
 import downloadAsset from "./downloadAsset.js";
+import * as Spinner from "./spinner.js";
 
 /**
  *
@@ -75,10 +75,6 @@ export function renderAssetsGrid(
   renderPaginationBtns(fetchData, type, appId);
 }
 
-function initialisePaginationBtns() {
-  
-}
-
 function renderImages(fetchData: PaginatedAssets, type: AssetType) {
   const assetsGrid = document.getElementById("assets-grid");
   if (!assetsGrid) {
@@ -97,9 +93,23 @@ function renderImages(fetchData: PaginatedAssets, type: AssetType) {
     const img = document.createElement("img");
     img.src = asset.thumbnailImageUrl;
     img.alt = asset.author.name || "Asset";
-    img.addEventListener("click", () =>
-      downloadAsset(asset.fullImageUrl, type)
-    );
+    img.classList.add("asset-img");
+    img.addEventListener("click", async () => {
+      const assetCard = img.closest(".asset-card") as HTMLElement;
+      if (!assetCard) return;
+
+      assetCard.classList.add("loading"); 
+      const spinner = Spinner.createSpinner(assetCard);
+
+      try {
+        await downloadAsset(asset.fullImageUrl, type);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        Spinner.deleteSpinner(spinner);
+        assetCard.classList.remove("loading");
+      }
+    });
 
     // Author profile
     const steamProfileUrl = asset.author.steamProfileUrl;
