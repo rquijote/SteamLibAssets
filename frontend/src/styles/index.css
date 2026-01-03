@@ -55,9 +55,10 @@ body {
 *
 */
 
-#title {
+#header-title {
   color: white;
   margin: 0px;
+  cursor: pointer;
 }
 
 .search-wrapper {

@@ -19,8 +19,7 @@ const iconsBtn = document.getElementById("icons-btn");
 const defaultAppId = 5262075; // Temp default id
 let selectedAppId = defaultAppId;
 const firstPage = 1;
-loadAssets("grid", firstPage, selectedAppId); // Loads the initial page
-//RenderHomepage.showHomepage();
+RenderHomepage.showHomepage();
 
 /**
  *
@@ -29,8 +28,20 @@ loadAssets("grid", firstPage, selectedAppId); // Loads the initial page
  */
 
 initAllSearches((type: AssetType, page: number, appId: number) => {
+  selectedAppId = appId;
   loadAssets(type, page, appId);
 });
+
+/**
+ * 
+ * Header Title Event Listener
+ * 
+ */
+
+const headerTitle = document.getElementById("header-title");
+headerTitle?.addEventListener("click", () => {
+  RenderHomepage.showHomepage();
+})
 
 /**
  *

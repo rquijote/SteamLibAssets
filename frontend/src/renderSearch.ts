@@ -1,4 +1,5 @@
 import * as Fetch from "./fetchAssets.js";
+import * as renderHomepage from "./renderHomepage.js";
 import type { AssetType } from "./types/Asset.js";
 
 export function setupLiveSearch(
@@ -86,6 +87,7 @@ export function renderSearchResults(
 
     item.addEventListener("click", () => {
       onSelect(game);
+      renderHomepage.hideHomepage();
       container.innerHTML = "";
     });
 
