@@ -21,29 +21,31 @@
   <body>
     <div id="homepage-container">
       <h1 class="homepage-title">Steam Assets Downloader</h1>
-
       <div class="search-wrapper">
         <input
           type="text"
-          id="homepage-search"
-          placeholder="Search for a game..."
+          class="search-input"
+          id="homepage-search-input"
+          name="search-input"
           autocomplete="off"
+          placeholder="Search for a game..."
         />
+        <div class="search-results"></div>
       </div>
     </div>
     <div id="asset-page-container">
       <div id="bg-container">
         <div id="bg-header">
           <h1 id="title">Steam Assets Downloader</h1>
-          <div id="search-wrapper">
+          <div class="search-wrapper">
             <input
               type="text"
-              id="searchInput"
-              name="searchInput"
+              class="search-input"
+              name="search-input"
               autocomplete="off"
               placeholder="Search for a game..."
             />
-            <div id="search-results"></div>
+            <div class="search-results"></div>
           </div>
         </div>
       </div>

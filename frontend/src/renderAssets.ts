@@ -177,6 +177,7 @@ function renderImages(fetchData: PaginatedAssets, type: AssetType) {
   });
 }
 
+// Feels like an overly complicated function, would be nice to polish this.
 function renderPaginationBtns(
   fetchData: PaginatedAssets,
   type: AssetType,
@@ -268,33 +269,4 @@ function appendPaginationUl(
 
     div.appendChild(clone);
   }
-}
-
-/**
- *
- * Render Search Results
- *
- */
-
-export function renderSearchResults(
-  results: { id: number; name: string }[],
-  onSelect: (game: { id: number; name: string }) => void
-) {
-  const container = document.getElementById("search-results");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  results.forEach((game) => {
-    const item = document.createElement("div");
-    item.classList.add("search-result-item");
-    item.textContent = game.name;
-
-    item.addEventListener("click", () => {
-      onSelect(game);
-      container.innerHTML = "";
-    });
-
-    container.appendChild(item);
-  });
 }

@@ -3,11 +3,11 @@ import * as RenderAssets from "./renderAssets.js";
 import type { AssetType, PaginatedAssets } from "./types/Asset.js";
 import * as Spinner from "./spinner.js";
 import * as RenderHomepage from "./renderHomepage.js"
-import { initSearch } from "./renderSearch.js";
+import { initAllSearches } from "./renderSearch.js";
 
 /**
  *
- * Initializations 
+ * Initialisations 
  *
  */
 
@@ -28,16 +28,9 @@ loadAssets("grid", firstPage, selectedAppId); // Loads the initial page
  *
  */
 
-const searchInput = document.getElementById("searchInput") as HTMLInputElement;
-const searchResults = document.getElementById("search-results") as HTMLDivElement;
-
-if (searchInput && searchResults) {
-  initSearch(searchInput, searchResults, (game) => {
-    selectedAppId = game.id;
-    searchInput.value = game.name;
-    loadAssets("grid", firstPage, selectedAppId);
-  })
-}
+initAllSearches((type: AssetType, page: number, appId: number) => {
+  loadAssets(type, page, appId);
+});
 
 /**
  *

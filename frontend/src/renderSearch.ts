@@ -1,18 +1,9 @@
-import * as RenderAssets from "./renderAssets.js";
 import * as Fetch from "./fetchAssets.js";
-
-export function initSearch(
-  searchInput: HTMLInputElement,
-  searchResults: HTMLDivElement,
-  onSelect: (game: { id: number; name: string; }) => void
-) {
-  setupLiveSearch(searchInput, onSelect);
-  setupFocusBehavior(searchInput, searchResults);
-}
+import type { AssetType } from "./types/Asset.js";
 
 export function setupLiveSearch(
   input: HTMLInputElement,
-  onSelect: (game: { id: number; name: string; }) => void
+  onSelect: (game: { id: number; name: string }) => void
 ) {
   let debounceTimer: number; // Reduces frequent pings to the API every input.
 
@@ -22,13 +13,13 @@ export function setupLiveSearch(
     debounceTimer = window.setTimeout(async () => {
       const inputValue = input.value.trim();
       if (!inputValue) {
-        RenderAssets.renderSearchResults([], onSelect);
+        renderSearchResults([], onSelect);
         return;
       }
 
       try {
         const listData = await Fetch.searchGames(inputValue);
-        RenderAssets.renderSearchResults(listData, onSelect);
+        renderSearchResults(listData, onSelect);
       } catch (err) {
         console.error(err);
       }
@@ -36,14 +27,38 @@ export function setupLiveSearch(
   });
 }
 
-// Click away closes search, clicking on will open search.
+// Initialises all searches with event listeners. Currently, the homepage and the header searches.
+export function initAllSearches(
+  loadAssets: (type: AssetType, firstPage: number, appId: number) => void
+) {
+  const inputs = document.querySelectorAll<HTMLInputElement>(".search-input");
+  const firstPage = 1;
+
+  inputs.forEach((input) => {
+    const resultsContainer = input
+      .closest(".search-wrapper")
+      ?.querySelector(".search-results") as HTMLDivElement;
+
+    if (!resultsContainer) return;
+
+    setupFocusBehavior(input, resultsContainer);
+    setupLiveSearch(input, (game) => {
+      input.value = game.name;
+      loadAssets("grid", firstPage, game.id);
+    });
+  });
+}
+
+// Click away closes search, clicking on input will open it
 export function setupFocusBehavior(
   input: HTMLInputElement,
   resultsContainer: HTMLDivElement
 ) {
   input.addEventListener("focus", () => {
-    resultsContainer.classList.add("visible");
-    input.classList.add("active");
+    if (!input.classList.contains("active")) {
+      resultsContainer.classList.add("visible");
+      input.classList.add("active");
+    }
   });
 
   document.addEventListener("click", (e) => {
@@ -54,3 +69,26 @@ export function setupFocusBehavior(
   });
 }
 
+// Render search results div
+export function renderSearchResults(
+  results: { id: number; name: string }[],
+  onSelect: (game: { id: number; name: string }) => void
+) {
+  const container = document.querySelector(".search-results.visible");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  results.forEach((game) => {
+    const item = document.createElement("div");
+    item.classList.add("search-result-item");
+    item.textContent = game.name;
+
+    item.addEventListener("click", () => {
+      onSelect(game);
+      container.innerHTML = "";
+    });
+
+    container.appendChild(item);
+  });
+}
