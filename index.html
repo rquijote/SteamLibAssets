@@ -19,38 +19,58 @@
     />
   </head>
   <body>
-    <div id="bg-header">
-      <div id="bg-container">
-        <h1 id="title">Steam Assets Downloader</h1>
-        <div id="search-wrapper">
-          <input
-            type="text"
-            id="searchInput"
-            name="searchInput"
-            autocomplete="off"
-            placeholder="Search for a game..."
-          />
-          <div id="search-results"></div>
-        </div>
+    <div id="homepage-container">
+      <h1 class="homepage-title">Steam Assets Downloader</h1>
+
+      <div class="search-wrapper">
+        <input
+          type="text"
+          id="homepage-search"
+          placeholder="Search for a game..."
+          autocomplete="off"
+        />
       </div>
     </div>
-    <div id="main-container">
-      <div id="assets-container">
-        <div id="assets-btns-wrapper">
-          <button type="button" class="asset-btns" id="grids-btn">Grids</button>
-          <button type="button" class="asset-btns" id="heroes-btn">
-            Heroes
-          </button>
-          <button type="button" class="asset-btns" id="logos-btn">Logos</button>
-          <button type="button" class="asset-btns" id="icons-btn">Icons</button>
-        </div>
-        <div id="assets-grid-wrapper">
-          <div class="pagination-btns"></div>
-          <div id="spinner-wrapper">
-            <div class="spinner global-spinner"></div>
+    <div id="asset-page-container">
+      <div id="bg-container">
+        <div id="bg-header">
+          <h1 id="title">Steam Assets Downloader</h1>
+          <div id="search-wrapper">
+            <input
+              type="text"
+              id="searchInput"
+              name="searchInput"
+              autocomplete="off"
+              placeholder="Search for a game..."
+            />
+            <div id="search-results"></div>
           </div>
-          <div id="assets-grid"></div>
-          <div class="pagination-btns"></div>
+        </div>
+      </div>
+      <div id="main-container">
+        <div id="assets-container">
+          <div id="assets-btns-wrapper">
+            <button type="button" class="asset-btns" id="grids-btn">
+              Grids
+            </button>
+            <button type="button" class="asset-btns" id="heroes-btn">
+              Heroes
+            </button>
+            <button type="button" class="asset-btns" id="logos-btn">
+              Logos
+            </button>
+            <button type="button" class="asset-btns" id="icons-btn">
+              Icons
+            </button>
+          </div>
+          <div id="assets-grid-wrapper">
+            <div class="pagination-btns"></div>
+            <div id="spinner-wrapper">
+              <div class="spinner global-spinner"></div>
+            </div>
+            <div id="assets-grid"></div>
+            <div class="pagination-btns"></div>
+          </div>
         </div>
       </div>
     </div>

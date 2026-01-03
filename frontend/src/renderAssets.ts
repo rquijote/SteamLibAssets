@@ -14,30 +14,48 @@ import * as Spinner from "./spinner.js";
  */
 
 export function renderBGDiv(allAssets: DownloadAssets) {
+  const bgContainer = document.getElementById("bg-container") as HTMLDivElement;
   const bgHeader = document.getElementById("bg-header") as HTMLDivElement;
 
-  bgHeader.style.background = `
+  // Remove any old messages
+  bgContainer.querySelectorAll(".not-found-message").forEach((el) => el.remove());
+  bgHeader.querySelectorAll(".not-found-message").forEach((el) => el.remove());
+
+  const gradient = `
     linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 25%),
-    linear-gradient(
-      to bottom,
-      rgba(0,0,0,0) 75%,
-      rgba(0,0,0,0.35) 88%,
-      rgba(0,0,0,0.7) 96%,
-      rgba(0,0,0,1) 100%
-    ),
-    url("${allAssets.hero.fullImageUrl}") center/cover no-repeat
+    linear-gradient(to bottom, rgba(0,0,0,0) 75%, rgba(0,0,0,0.35) 88%, rgba(0,0,0,0.7) 96%, rgba(0,0,0,1) 100%)
   `;
 
-  let logo = document.getElementById("bg-logo") as HTMLImageElement;
+  if (allAssets?.hero?.fullImageUrl) {
+    bgContainer.style.backgroundImage = `
+      ${gradient},
+      url("${allAssets.hero.fullImageUrl}")
+    `;
+  } else {
+    bgContainer.style.backgroundImage = gradient;
 
-  if (logo == null) {
-    logo = document.createElement("img");
+    const heroMsg = document.createElement("div");
+    heroMsg.className = "not-found-message";
+    heroMsg.textContent = "Hero image could not be found";
+    bgHeader.appendChild(heroMsg);
   }
 
-  logo.src = allAssets.logo.thumbnailImageUrl;
-  logo.id = "bg-logo";
-  const bgContainer = document.getElementById("bg-container") as HTMLDivElement;
-  bgContainer.appendChild(logo);
+  // Remove any old logo first
+  const oldLogo = document.getElementById("bg-logo");
+  if (oldLogo) oldLogo.remove();
+
+  if (allAssets?.logo?.thumbnailImageUrl) {
+    const logo = document.createElement("img");
+    logo.id = "bg-logo";
+    logo.src = allAssets.logo.thumbnailImageUrl;
+    bgHeader.appendChild(logo);
+  } else {
+    const logoMsg = document.createElement("div");
+    logoMsg.id = "bg-logo";
+    logoMsg.className = "not-found-message";
+    logoMsg.textContent = "Logo doesn't exist";
+    bgHeader.appendChild(logoMsg);
+  }
 }
 
 /**
@@ -98,7 +116,7 @@ function renderImages(fetchData: PaginatedAssets, type: AssetType) {
       const assetCard = img.closest(".asset-card") as HTMLElement;
       if (!assetCard) return;
 
-      assetCard.classList.add("loading"); 
+      assetCard.classList.add("loading");
       const spinner = Spinner.createSpinner(assetCard);
 
       try {
