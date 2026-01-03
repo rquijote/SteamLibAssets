@@ -2,12 +2,12 @@ import * as Fetch from "./fetchAssets.js";
 import * as RenderAssets from "./renderAssets.js";
 import type { AssetType, PaginatedAssets } from "./types/Asset.js";
 import * as Spinner from "./spinner.js";
-import * as RenderHomepage from "./renderHomepage.js"
+import * as RenderHomepage from "./renderHomepage.js";
 import { initAllSearches } from "./renderSearch.js";
 
 /**
  *
- * Initialisations 
+ * Initialisations
  *
  */
 
@@ -33,19 +33,48 @@ initAllSearches((type: AssetType, page: number, appId: number) => {
 });
 
 /**
- * 
+ *
  * Header Title Event Listener
- * 
+ *
  */
 
 const headerTitle = document.getElementById("header-title");
 headerTitle?.addEventListener("click", () => {
   RenderHomepage.showHomepage();
-})
+});
 
 /**
  *
- * Load Assets Event Listener 
+ * Quick Links Homepage
+ *
+ */
+
+const quicklinks = [
+  { name: "Hades 2", appId: 5376530 },
+  { name: "Stray", appId: 5262075 },
+  { name: "Ori and the Blind Forest", appId: 3360 },
+  { name: "Elden Ring", appId: 5277816 },
+  { name: "DAVE THE DIVER", appId: 5325005 },
+  { name: "Red Dead Redemption II", appId: 5249031 },
+];
+
+const quicklinksGrid = document.querySelector(".quicklinks-grid");
+if (quicklinksGrid) {
+  quicklinks.forEach((link) => {
+    const div = document.createElement("div");
+    div.className = "quicklink";
+    div.textContent = link.name;
+    div.addEventListener("click", () => {
+      loadAssets("grid", firstPage, link.appId);
+      RenderHomepage.hideHomepage();
+    });
+    quicklinksGrid.appendChild(div);
+  });
+}
+
+/**
+ *
+ * Load Assets Event Listener
  *
  */
 
@@ -69,6 +98,11 @@ export async function loadAssets(
 ) {
   let fetchData: PaginatedAssets;
   Spinner.showSpinner();
+
+  // Load only when switching to a different appId
+  const isNewApp = selectedAppId !== appId;
+  if (isNewApp) showLoadingState();
+
   switch (type) {
     case "grid":
       fetchData = await Fetch.fetchGrids(appId, pageNum);
@@ -83,10 +117,35 @@ export async function loadAssets(
       fetchData = await Fetch.fetchIcons(appId, firstPage);
       break;
   }
-  // Should have a loading icon here during this.
-  let allAssets = await Fetch.fetchAll(appId);
+
+  const allAssets = await Fetch.fetchAll(appId);
+
   RenderAssets.renderActiveAssetsBtn(type);
   RenderAssets.renderBGDiv(allAssets);
   RenderAssets.renderAssetsGrid(fetchData, type, appId);
+
+  if (isNewApp) hideLoadingState();
   Spinner.hideSpinner();
+  selectedAppId = appId;
+}
+
+function showLoadingState() {
+  const bgContainer = document.getElementById("bg-container") as HTMLDivElement;
+  if (bgContainer) {
+    bgContainer.style.backgroundImage = `
+    linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 25%),
+    linear-gradient(to bottom, rgba(0,0,0,0) 75%, rgba(0,0,0,0.35) 88%, rgba(0,0,0,0.7) 96%, rgba(0,0,0,1) 100%)
+  `;
+  }
+  const bgLogo = document.getElementById("bg-logo");
+  if (bgLogo) {
+    bgLogo.style.display = "none";
+  }
+}
+
+function hideLoadingState() {
+  const bgLogo = document.getElementById("bg-logo");
+  if (bgLogo) {
+    bgLogo.style.display = "block";
+  }
 }
