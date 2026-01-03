@@ -1,49 +1,44 @@
 const API_BASE = "http://localhost:5062/api/assets"; // temp port for local host
-export async function fetchGrids(appId) {
-    const res = await fetch(`${API_BASE}/grids/${appId}`);
+export async function fetchGrids(appId, pageNum) {
+    const res = await fetch(`${API_BASE}/grids/${appId}/${pageNum}`);
     if (!res.ok)
         throw new Error("Failed to fetch grids");
-    const rawData = await res.json();
-    return mapAssets(rawData);
+    const data = await res.json();
+    return data;
 }
-export async function fetchHeroes(appId) {
-    const res = await fetch(`${API_BASE}/heroes/${appId}`);
+export async function fetchHeroes(appId, pageNum) {
+    const res = await fetch(`${API_BASE}/heroes/${appId}/${pageNum}`);
     if (!res.ok)
         throw new Error("Failed to fetch heroes");
-    const rawData = await res.json();
-    return mapAssets(rawData);
+    const data = await res.json();
+    return data;
 }
-export async function fetchLogos(appId) {
-    const res = await fetch(`${API_BASE}/logos/${appId}`);
+export async function fetchLogos(appId, pageNum) {
+    const res = await fetch(`${API_BASE}/logos/${appId}/${pageNum}`);
     if (!res.ok)
         throw new Error("Failed to fetch logos");
-    const rawData = await res.json();
-    return mapAssets(rawData);
+    const data = await res.json();
+    return data;
 }
-export async function fetchIcons(appId) {
-    const res = await fetch(`${API_BASE}/icons/${appId}`);
+export async function fetchIcons(appId, pageNum) {
+    const res = await fetch(`${API_BASE}/icons/${appId}/${pageNum}`);
     if (!res.ok)
         throw new Error("Failed to fetch icons");
-    const rawData = await res.json();
-    return mapAssets(rawData);
+    const data = await res.json();
+    return data;
 }
-function mapAssets(rawData) {
-    //Filters out anything that isn't a jpg, png or jpeg.
-    return rawData
-        .filter((item) => {
-        const url = item.fullImageUrl.toLowerCase();
-        return (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".jpeg"));
-    })
-        .map((item) => ({
-        fullImageUrl: item.fullImageUrl,
-        thumbnailImageUrl: item.thumbnailImageUrl,
-        width: item.width,
-        height: item.height,
-        author: {
-            name: item.author.name,
-            avatarUrl: item.author.avatarUrl,
-            steamProfileUrl: item.author.steamProfileUrl,
-        },
-    }));
+export async function fetchAll(appId) {
+    const res = await fetch(`${API_BASE}/all/${appId}`);
+    if (!res.ok)
+        throw new Error("Failed to fetch all assets");
+    const data = await res.json();
+    return data;
+}
+export async function searchGames(searchTerm) {
+    const res = await fetch(`${API_BASE}/search/${searchTerm}`);
+    if (!res.ok)
+        throw new Error("Failed to fetch all assets");
+    const data = await res.json();
+    return data;
 }
 //# sourceMappingURL=fetchAssets.js.map

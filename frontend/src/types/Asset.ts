@@ -30,4 +30,5 @@ export type DownloadAssets = {
 export type GameAsset = {
   id: number;
   name: string;
+  releaseDate: string;
 }

@@ -1,6 +1,6 @@
 import * as Fetch from "./fetchAssets.js";
 import * as renderHomepage from "./renderHomepage.js";
-import type { AssetType } from "./types/Asset.js";
+import type { AssetType, GameAsset } from "./types/Asset.js";
 
 export function setupLiveSearch(
   input: HTMLInputElement,
@@ -72,8 +72,8 @@ export function setupFocusBehavior(
 
 // Render search results div
 export function renderSearchResults(
-  results: { id: number; name: string }[],
-  onSelect: (game: { id: number; name: string }) => void
+  results: GameAsset[],
+  onSelect: (game: GameAsset) => void
 ) {
   const container = document.querySelector(".search-results.visible");
   if (!container) return;
@@ -83,7 +83,10 @@ export function renderSearchResults(
   results.forEach((game) => {
     const item = document.createElement("div");
     item.classList.add("search-result-item");
-    item.textContent = game.name;
+
+    // Extract year from releaseDate
+    const year = new Date(game.releaseDate).getFullYear();
+    item.textContent = `${game.name} (${year})`;
 
     item.addEventListener("click", () => {
       onSelect(game);

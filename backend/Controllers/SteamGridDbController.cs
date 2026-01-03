@@ -136,7 +136,8 @@ namespace SteamLibAssets.Controllers
                 .Select(game => new
                 {
                     game.Id,
-                    game.Name
+                    game.Name,
+                    game.ReleaseDate
                 })
                 .ToList();
 

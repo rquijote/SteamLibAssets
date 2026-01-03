@@ -1,157 +1,121 @@
 import * as Fetch from "./fetchAssets.js";
-import * as Render from "./renderAssets.js";
-//Shift f1 -> Run Build Task to run TS watch
-console.log("js file loaded");
+import * as RenderAssets from "./renderAssets.js";
+import * as Spinner from "./spinner.js";
+import * as RenderHomepage from "./renderHomepage.js";
+import { initAllSearches } from "./renderSearch.js";
 /**
  *
- * Event Listeners
+ * Initialisations
  *
  */
-const appIdButton = document.getElementById("enterAppIdBtn");
-const downloadBtn = document.getElementById("downloadBtn");
 const gridsBtn = document.getElementById("grids-btn");
 const heroesBtn = document.getElementById("heroes-btn");
 const logosBtn = document.getElementById("logos-btn");
 const iconsBtn = document.getElementById("icons-btn");
-const appId = 5262075; // Temp default id
-assetBtnsClick("grids");
-appIdButton.addEventListener("click", enterAppIDButtonClick);
-downloadBtn.addEventListener("click", downloadButtonClick);
-gridsBtn.addEventListener("click", () => assetBtnsClick("grids"));
-heroesBtn.addEventListener("click", () => assetBtnsClick("heroes"));
-logosBtn.addEventListener("click", () => assetBtnsClick("logos"));
-iconsBtn.addEventListener("click", () => assetBtnsClick("icons"));
-async function assetBtnsClick(type) {
-    let assets;
+const defaultAppId = 5262075; // Temp default id
+let selectedAppId = defaultAppId;
+const firstPage = 1;
+RenderHomepage.showHomepage();
+/**
+ *
+ * Search Bar Initialisation
+ *
+ */
+initAllSearches((type, page, appId) => {
+    selectedAppId = appId;
+    loadAssets(type, page, appId);
+});
+/**
+ *
+ * Header Title Event Listener
+ *
+ */
+const headerTitle = document.getElementById("header-title");
+headerTitle?.addEventListener("click", () => {
+    RenderHomepage.showHomepage();
+});
+/**
+ *
+ * Quick Links Homepage
+ *
+ */
+const quicklinks = [
+    { name: "Hades 2", appId: 5376530 },
+    { name: "Stray", appId: 5262075 },
+    { name: "Ori and the Blind Forest", appId: 3360 },
+    { name: "Elden Ring", appId: 5277816 },
+    { name: "DAVE THE DIVER", appId: 5325005 },
+    { name: "Red Dead Redemption II", appId: 5249031 },
+];
+const quicklinksGrid = document.querySelector(".quicklinks-grid");
+if (quicklinksGrid) {
+    quicklinks.forEach((link) => {
+        const div = document.createElement("div");
+        div.className = "quicklink";
+        div.textContent = link.name;
+        div.addEventListener("click", () => {
+            loadAssets("grid", firstPage, link.appId);
+            RenderHomepage.hideHomepage();
+        });
+        quicklinksGrid.appendChild(div);
+    });
+}
+/**
+ *
+ * Load Assets Event Listener
+ *
+ */
+gridsBtn.addEventListener("click", () => loadAssets("grid", firstPage, selectedAppId));
+heroesBtn.addEventListener("click", () => loadAssets("hero", firstPage, selectedAppId));
+logosBtn.addEventListener("click", () => loadAssets("logo", firstPage, selectedAppId));
+iconsBtn.addEventListener("click", () => loadAssets("icon", firstPage, selectedAppId));
+export async function loadAssets(type, pageNum, appId) {
+    let fetchData;
+    Spinner.showSpinner();
+    // Load only when switching to a different appId
+    const isNewApp = selectedAppId !== appId;
+    if (isNewApp)
+        showLoadingState();
     switch (type) {
-        case "grids":
-            assets = await Fetch.fetchGrids(appId);
+        case "grid":
+            fetchData = await Fetch.fetchGrids(appId, pageNum);
             break;
-        case "heroes":
-            assets = await Fetch.fetchHeroes(appId);
+        case "hero":
+            fetchData = await Fetch.fetchHeroes(appId, pageNum);
             break;
-        case "logos":
-            assets = await Fetch.fetchLogos(appId);
+        case "logo":
+            fetchData = await Fetch.fetchLogos(appId, pageNum);
             break;
-        case "icons":
-            assets = await Fetch.fetchIcons(appId);
+        case "icon":
+            fetchData = await Fetch.fetchIcons(appId, firstPage);
             break;
     }
-    // Should have a loading icon ihere during this.
-    Render.renderImages(assets);
+    const allAssets = await Fetch.fetchAll(appId);
+    RenderAssets.renderActiveAssetsBtn(type);
+    RenderAssets.renderBGDiv(allAssets);
+    RenderAssets.renderAssetsGrid(fetchData, type, appId);
+    if (isNewApp)
+        hideLoadingState();
+    Spinner.hideSpinner();
+    selectedAppId = appId;
 }
-async function enterAppIDButtonClick() {
-    const appIdInputValue = (document.getElementById("appIdInput")).value;
-    if (appIdInputValue == null)
-        return;
-}
-async function downloadButtonClick() {
-    const imgs = document.querySelectorAll("img"); // Selects all imgs
-    let urls = [];
-    imgs.forEach((el) => {
-        if (el.nextElementSibling.checked) {
-            // Presumes all next element of img are an HTMLInputElement.
-            urls.push(el.src);
-        }
-    });
-    console.log(urls);
-    const promises = urls.map(async (url) => {
-        const result = await fetch(url);
-        const blob = await result.blob();
-        return blob;
-    });
-    const imgNames = [
-        "main_capsule_img",
-        "small_capsule_img",
-        "header_img",
-        "library_capsule_img",
-        "2xlibrary_capsule_img",
-        "library_hero_img",
-    ];
-    const blobs = await Promise.all(promises);
-    const zip = new JSZip();
-    blobs.forEach((blob, index) => {
-        zip.file(`${index}_${imgNames[index]}.jpg`, blob);
-    });
-    const zipFile = await zip.generateAsync({ type: "blob" });
-    console.log(zipFile);
-    downloadZip(zipFile);
-}
-function downloadZip(file) {
-    const a = document.createElement("a");
-    a.download = "test.zip";
-    const url = URL.createObjectURL(file);
-    a.href = url;
-    a.style.display = "none";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-}
-/**
- *
- * Fetch Assets Functions
- *
- */
-async function getAllAssets(appID) {
-    const urls = [
-        `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/library_600x900.jpg`, // library capsule (cover)
-        `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/header.jpg`, // header (background)
-        `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/logo.png`, // transparent logo (logo)
-        `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/capsule_616x353.jpg`, // main capsule
-        `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/capsule_231x87.jpg`, // small capsule
-        `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/library_hero.jpg`, // library hero
-    ];
-    let blobs = [];
-    for (const url of urls) {
-        const blob = await getBlob(url);
-        if (blob) {
-            blobs.push(blob);
-        }
-        else {
-            blobs.push(undefined);
-        }
+function showLoadingState() {
+    const bgContainer = document.getElementById("bg-container");
+    if (bgContainer) {
+        bgContainer.style.backgroundImage = `
+    linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 25%),
+    linear-gradient(to bottom, rgba(0,0,0,0) 75%, rgba(0,0,0,0.35) 88%, rgba(0,0,0,0.7) 96%, rgba(0,0,0,1) 100%)
+  `;
     }
-    return blobs;
-}
-async function getBlob(url) {
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
-        const result = await fetch(url);
-        const blob = await result.blob();
-        return blob;
-    }
-    catch (error) {
-        console.error(error.message);
+    const bgLogo = document.getElementById("bg-logo");
+    if (bgLogo) {
+        bgLogo.style.display = "none";
     }
 }
-/**
- *
- * Frontend DOM Functions
- *
- */
-function printAllAssets(blobs) {
-    for (let i = 0; i < blobs.length; i++) {
-        let div = document.createElement("div");
-        let img = document.createElement("img");
-        let input = document.createElement("input");
-        input.type = "checkbox";
-        const blob = blobs[i];
-        if (!blob) {
-            img.src =
-                "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
-            input.checked = false;
-        }
-        else {
-            img.src = URL.createObjectURL(blob);
-            input.checked = true;
-        }
-        div.appendChild(img);
-        div.appendChild(input);
-        document.body.appendChild(div);
+function hideLoadingState() {
+    const bgLogo = document.getElementById("bg-logo");
+    if (bgLogo) {
+        bgLogo.style.display = "block";
     }
 }
 //# sourceMappingURL=index.js.map
