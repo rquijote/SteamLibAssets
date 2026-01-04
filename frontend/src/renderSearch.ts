@@ -7,24 +7,25 @@ export function setupLiveSearch(
   onSelect: (game: { id: number; name: string }) => void
 ) {
   let debounceTimer: number; // Reduces frequent pings to the API every input.
+  ["input", "focus"].forEach(eventType => {
+    input.addEventListener(eventType, () => {
+      clearTimeout(debounceTimer);
 
-  input.addEventListener("input", () => {
-    clearTimeout(debounceTimer);
+      debounceTimer = window.setTimeout(async () => {
+        const inputValue = input.value.trim();
+        if (!inputValue) {
+          renderSearchResults([], onSelect);
+          return;
+        }
 
-    debounceTimer = window.setTimeout(async () => {
-      const inputValue = input.value.trim();
-      if (!inputValue) {
-        renderSearchResults([], onSelect);
-        return;
-      }
-
-      try {
-        const listData = await Fetch.searchGames(inputValue);
-        renderSearchResults(listData, onSelect);
-      } catch (err) {
-        console.error(err);
-      }
-    }, 300);
+        try {
+          const listData = await Fetch.searchGames(inputValue);
+          renderSearchResults(listData, onSelect);
+        } catch (err) {
+          console.error(err);
+        }
+      }, 300);
+    });
   });
 }
 
