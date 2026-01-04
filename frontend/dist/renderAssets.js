@@ -90,6 +90,7 @@ function renderImages(fetchData, type) {
         img.src = asset.thumbnailImageUrl;
         img.alt = asset.author.name || "Asset";
         img.classList.add("asset-img");
+        img.classList.add(`asset-${type}`);
         img.addEventListener("click", async () => {
             const assetCard = img.closest(".asset-card");
             if (!assetCard)

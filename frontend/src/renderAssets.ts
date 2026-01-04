@@ -112,6 +112,7 @@ function renderImages(fetchData: PaginatedAssets, type: AssetType) {
     img.src = asset.thumbnailImageUrl;
     img.alt = asset.author.name || "Asset";
     img.classList.add("asset-img");
+    img.classList.add(`asset-${type}`)
     img.addEventListener("click", async () => {
       const assetCard = img.closest(".asset-card") as HTMLElement;
       if (!assetCard) return;

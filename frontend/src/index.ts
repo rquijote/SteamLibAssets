@@ -99,12 +99,9 @@ export async function loadAssets(
   let fetchData: PaginatedAssets;
   Spinner.showSpinner();
 
-  console.log(selectedAppId);
-  console.log(appId);
   // Load only when switching to a different appId
   const isNewApp = selectedAppId !== appId;
   if (isNewApp) showLoadingState();
-  console.log("past the isnewapp filter");
 
   switch (type) {
     case "grid":
@@ -134,7 +131,6 @@ export async function loadAssets(
 
 function showLoadingState() {
   const bgContainer = document.getElementById("bg-container") as HTMLDivElement;
-  console.log("is new app");
   if (bgContainer) {
     bgContainer.style.backgroundImage = `
     linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 25%),

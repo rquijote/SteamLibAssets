@@ -42,7 +42,7 @@ export async function searchGames(searchTerm) {
     return data;
 }
 export default async function downloadAsset(url, fileName) {
-    const queryUrl = new URL(`${API_BASE}/proxy"`);
+    const queryUrl = new URL(`${API_BASE}/proxy`);
     queryUrl.searchParams.set("url", url);
     const res = await fetch(queryUrl.toString());
     if (!res.ok)
