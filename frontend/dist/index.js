@@ -22,8 +22,8 @@ RenderHomepage.showHomepage();
  *
  */
 initAllSearches((type, page, appId) => {
-    selectedAppId = appId;
     loadAssets(type, page, appId);
+    selectedAppId = appId;
 });
 /**
  *
@@ -54,8 +54,8 @@ if (quicklinksGrid) {
         div.className = "quicklink";
         div.textContent = link.name;
         div.addEventListener("click", () => {
-            loadAssets("grid", firstPage, link.appId);
             RenderHomepage.hideHomepage();
+            loadAssets("grid", firstPage, link.appId);
         });
         quicklinksGrid.appendChild(div);
     });
@@ -72,10 +72,13 @@ iconsBtn.addEventListener("click", () => loadAssets("icon", firstPage, selectedA
 export async function loadAssets(type, pageNum, appId) {
     let fetchData;
     Spinner.showSpinner();
+    console.log(selectedAppId);
+    console.log(appId);
     // Load only when switching to a different appId
     const isNewApp = selectedAppId !== appId;
     if (isNewApp)
         showLoadingState();
+    console.log("past the isnewapp filter");
     switch (type) {
         case "grid":
             fetchData = await Fetch.fetchGrids(appId, pageNum);
@@ -101,6 +104,7 @@ export async function loadAssets(type, pageNum, appId) {
 }
 function showLoadingState() {
     const bgContainer = document.getElementById("bg-container");
+    console.log("is new app");
     if (bgContainer) {
         bgContainer.style.backgroundImage = `
     linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 25%),

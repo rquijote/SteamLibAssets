@@ -4,7 +4,7 @@ import type {
   DownloadAssets,
 } from "./types/Asset.js";
 import { loadAssets } from "./index.js";
-import downloadAsset from "./downloadAsset.js";
+import downloadAsset from "./fetchAssets.js";
 import * as Spinner from "./spinner.js";
 
 /**

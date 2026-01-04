@@ -41,4 +41,18 @@ export async function searchGames(searchTerm) {
     const data = await res.json();
     return data;
 }
+export default async function downloadAsset(url, fileName) {
+    const queryUrl = new URL(`${API_BASE}/proxy"`);
+    queryUrl.searchParams.set("url", url);
+    const res = await fetch(queryUrl.toString());
+    if (!res.ok)
+        throw new Error(`Failed to fetch image at ${url}`);
+    const blob = await res.blob();
+    const objectUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = objectUrl;
+    a.download = `${fileName}.png`;
+    a.click();
+    URL.revokeObjectURL(objectUrl);
+}
 //# sourceMappingURL=fetchAssets.js.map
