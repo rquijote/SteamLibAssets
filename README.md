@@ -73,3 +73,29 @@
 </p> 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- Getting Started -->
+<h2 id="getting-started">Getting Started</h2>
+
+#### 1. Clone the repository
+```bash
+git clone https://github.com/rquijote/SteamAssetsDownloader.git
+cd algorithms-visualiser-main 
+```
+
+#### 2. Create SteamDBGridAPI
+Create an account on <a href="https://www.steamgriddb.com/login">steamgriddb.com/login</a>
+Create API key on the top right of the homepage, preferences, API subheading. 
+
+#### 3. Set up the backend (C#)
+```bash
+cd backend 
+dotnet run
+```
+
+#### 4. Set up the frontend 
+```bash
+cd ../frontend
+Use a local server of your choice (e.g. VS Code Live Server Extension) to serve the index.html
+```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
